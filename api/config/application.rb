@@ -25,7 +25,7 @@ module App
     config.api_only = true
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins 'localhost:8000', '127.0.0.1:8000', 'example.com', 'api.example.com'
+        origins 'http://localhost:8000', '127.0.0.1:8000', 'example.com', 'api.example.com', 'http://0.0.0.0:8000/'
         resource '*',
          headers: :any,
          methods: [:get, :post, :put, :patch, :delete, :options, :head],
