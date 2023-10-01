@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  calendar_id: 1
+  nickname: MyString
+  password: MyString
+  user_id: MyString
+
+two:
+  calendar_id: 1
+  nickname: MyString
+  password: MyString
+  user_id: MyString
