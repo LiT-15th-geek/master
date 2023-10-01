@@ -23,5 +23,40 @@
     height: 40px;
     text-align: center;
     background-color: #D9D9D9;
-    border: 0px;
+    border: none;
+}
+
+.eachCalendar{
+    background-color: #F5F5F5;
+}
+.calendarTitle{
+    display: flex;
+    justify-content: space-between;
+}
+.calendarTitle h3{
+    font-size: 18px;
+    color: #525252;
+}
+.calendarDetails{
+    /*marginの指定の方法がこれであってるかカワスケに確認*/
+    margin-left: 15px;
+}
+.userIconsLists{
+    display: flex;
+    align-items: center;
+}
+.eachEvent{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.eventTitle p{
+    font-size: 16px;
+    color: #525252;
+}
+.eventDetails{
+    display: flex;
+    align-items: center;
+    /*paddingの指定の方法がこれであってるかカワスケに確認*/
+    padding-bottom: 5px;
 }
