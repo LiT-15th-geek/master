@@ -82,7 +82,52 @@ class CalendarsController < ApplicationController
     
         render json: {state: state}
     end
-    
+
+    def top
+        targetCalendar = Calender.where(id:params[:id]).select('team_title, description, user_id')
+        nicknameArray = []
+        nicknames = Bookeduser.where(calendar_id: params[:id]).select('nickname')
+        nicknames.each do |nickname|
+            nicknameArray.push(nickname.nickname)
+        end
+        targetEvents = Event.joins(:BookedUserSchedule).where(booked_user_schedules: {id: session[:bookeduser_id]}).select('title, decidedTime')
+        futureEvents = []
+        pastEvents = []
+
+        targetEvents.each do |targetEvent|
+            if targetEvent.decidedTime.nil? || targetEvent.decidedTime > DateTime.now
+                futureEvents << targetEvent
+            else
+                pastEvents << targetEvent
+            end
+
+        end
+
+        render json: {
+          calendar: targetCalendar,
+          members: nicknameArray,
+          futureEvents: futureEvents,
+          pastEvents: pastEvents
+        }
+    end
+
+    def exit
+        booked_user = BookedUser.find_by(id: session[:id])
+        if booked_user
+            #user_calendarからデータ消去
+            user_id = booked_user.user_id
+            if user_id
+                user_calendar = UserCalendar.where(user_id: user_id, calender_id: params[:id])
+                user_calendar.destroy
+            end
+            #bookeduserからデータ消去
+            booked_user.destroy
+
+            render json: {state: true}
+        else
+            render json: {state: false}
+        end
+    end
 
     def find_calendar
         @calendar = Calendar.find_by(calendar_id: params[:calendar_id])

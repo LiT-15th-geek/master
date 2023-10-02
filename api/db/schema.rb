@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_01_102324) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_02_192439) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "booked_user_schedules", force: :cascade do |t|
+    t.integer "event_id"
+    t.integer "BookedUser_id"
+    t.datetime "startTime"
+    t.datetime "endTime"
+    t.boolean "vague"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "booked_users", force: :cascade do |t|
     t.integer "calendar_id"
@@ -29,6 +39,29 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_01_102324) do
     t.string "user_id"
     t.boolean "is_private"
     t.boolean "is_delete"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "events", force: :cascade do |t|
+    t.integer "Calendar_id"
+    t.string "event_title"
+    t.string "description"
+    t.date "term_start_day"
+    t.date "term_end_day"
+    t.string "location"
+    t.string "user_id"
+    t.boolean "RecurrenceSetting"
+    t.integer "RequireTime"
+    t.datetime "desidedTime"
+    t.boolean "is_delete"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "user_calenders", force: :cascade do |t|
+    t.string "user_id"
+    t.string "calendar_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

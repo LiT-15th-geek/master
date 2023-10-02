@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   get '/user/:id', to: 'user#show', as: 'user'
 
   #主催者のカレンダートップ画面表示
-  get '/calendar/organizer/:user_id/:calendar_id/top', to: 'calendars#show', as: 'calendar'
+  #get '/calendar/organizer/:user_id/:calendar_id/top', to: 'calendars#show', as: 'calendar'
   #主催者が新しくカレンダーを作る画面を表示
   get '/calendar/organizer/:user_id/new', to: 'calendars#new', as: 'new_calendar'
   #主催者がすでにあるカレンダーの編集画面を表示
@@ -19,8 +19,15 @@ Rails.application.routes.draw do
   #参加者が自分が参加しているカレンダーを表示
   get '/calendar/participant/:calendar_id/:bookedUser_id', to: 'calendars#show'
 
+
+
+
   #URL踏んだ後名前選択画面
   get '/calendar/:id/bookedUser', to: 'calendars#show'
   put '/calendar/:id/bookedUser', to: 'calendars#authenticate'
+
+  #カレンダーのトップ画面
+  get '/calendar/:id', to: 'calendars#top'
+  delete '/calendar/:id', to: 'calendar#exit'
 
 end
