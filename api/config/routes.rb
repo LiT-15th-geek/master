@@ -18,4 +18,8 @@ Rails.application.routes.draw do
 
   #参加者が自分が参加しているカレンダーを表示
   get '/calendar/participant/:calendar_id/:bookedUser_id', to: 'calendars#show', as: 'calendar'
+
+  get '/booked_users/:calendar_id', to: 'booked_users#show'
+  post '/booked_users/:calendar_id/:nickname/:password', to: 'booked_users#authenticate'
+
 end
