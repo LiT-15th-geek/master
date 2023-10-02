@@ -4,6 +4,10 @@ users = [
     { id:"ccc",name: "たろう", email: "taro@example.com", icon: "https://example.com/images/baseball.png" }
 ]
 
+booked_users = [
+  { calendar_id: 1, nickname: "マエヒロ", password: "lifeistech", user_id: "uuid"}
+]
+
 # users.each do |user| 
     # ハッシュのキーを利用した分割代入
     # id, name,email,icon = user.values_at(:id,:name,:email,:icon)
@@ -20,4 +24,9 @@ calendars = [
 calendars.each do |calendar|
     team_title, description, user_id, is_private, is_delete = calendar.values_at(:team_title, :description, :user_id, :is_private, :is_delete)
     Calendar.create(team_title: team_title, description: description, user_id: user_id, is_private: is_private, is_delete: is_delete)
+end
+
+booked_users.each do |booked_user|
+    calendar_id, nickname, password, user_id = booked_user.values_at(:calendar_id, :nickname, :password, :user_id)
+    BookedUser.create(calendar_id: calendar_id, nickname: nickname, password: password, user_id: user_id)
 end
