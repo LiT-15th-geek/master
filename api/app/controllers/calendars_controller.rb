@@ -43,23 +43,46 @@ class CalendarsController < ApplicationController
         end
     end
 
-    #delete 主催者
     def destroy
+        @calendar = Calendar.find_by(id: params[:id])
         if @calendar.nil?
-            render plain: 'Calendar not found', status: :not_found
+          render plain: 'Calendar not found', status: :not_found
         elsif @calendar.user_id != params[:user_id].to_i
-            render plain: 'Unauthorized', status: :Unauthorized
+          render plain: 'Unauthorized', status: :unauthorized # :Unauthorized ではなく :unauthorized と小文字にする必要があります
         else
-            @calendar.destroy
-            render plain: 'Calendar deleted', status: deleted successfully
+          @calendar.destroy
+          render plain: 'Calendar deleted', status: :ok # deleted successfully ではなく :ok とする必要があります
         end
-    end
+      end
 
     #get 参加者
     def show
-        @calendar = Calendar.find_by(calendar_id: params[:calendar_id])
-        @user = bookedUser.find_by(id: params[:bookedUser_id])
+        is_Private = Calendar.find(params[:id]).is_private
+        nicknameArray = []
+        nicknames = Calendar.joins(:bookedUser).select('nickname').where(id: params[:id])
+        nicknames.each do |nickname|
+            nicknameArray.push(nickname.nickname)
+        end
+    
+        team_title = Calendar.find(params[:id]).team_title
+        render json: {
+          is_Private: is_Private,
+          nicknames: nicknames,
+          team_title: team_title
+        }
     end
+
+    def authenticate
+        targetBookedUser = Calendar.joins(:bookedUser).select('password,bookeduser.id').where(bookedusers: {nickname: params[:nickname]},id: params[:id])
+        if targetBookedUser.password == params[:password]
+            state = true
+        else
+            state = false
+        end
+    
+        render json: {state: state}
+    end
+    
 
     def find_calendar
         @calendar = Calendar.find_by(calendar_id: params[:calendar_id])
