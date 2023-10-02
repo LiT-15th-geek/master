@@ -17,9 +17,10 @@ Rails.application.routes.draw do
   delete '/calendar/organizer/:user_id/delete/:calendar_id', to: 'calendars#destroy'
 
   #参加者が自分が参加しているカレンダーを表示
-  get '/calendar/participant/:calendar_id/:bookedUser_id', to: 'calendars#show', as: 'calendar'
+  get '/calendar/participant/:calendar_id/:bookedUser_id', to: 'calendars#show'
 
-  get '/booked_users/:calendar_id', to: 'booked_users#show'
-  post '/booked_users/:calendar_id/:nickname/:password', to: 'booked_users#authenticate'
+  #URL踏んだ後名前選択画面
+  get '/calendar/:id/bookedUser', to: 'calendars#show'
+  put '/calendar/:id/bookedUser', to: 'calendars#authenticate'
 
 end
