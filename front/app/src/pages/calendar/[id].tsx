@@ -32,8 +32,9 @@ const Calendar = () => {
                     calendarDescription={data?.description || "デフォルトの説明"}
                 />
                 <CalendarMain/>
-                <CalendarEvent/>
-
+                {data?.now_events.map((event) => (
+                    <CalendarEvent key={event.id} eventTitle={event.title || "イベント名"}/>
+                ))}
             </div>
         </>
   )
