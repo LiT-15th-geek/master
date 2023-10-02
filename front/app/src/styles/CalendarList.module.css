@@ -5,11 +5,14 @@
     /*ディレクションで縦になったからjustify-contentで対応できる*/
     background-color: #F5F5F5;
     align-items: center;
-    height: 95px;
+    height: 178px;
 }
-.titleBar{
+.menuBar{
     display: flex;
     justify-content: space-between;
+}
+.titleBar{
+
 }
 .title{
     font-size: 24px;

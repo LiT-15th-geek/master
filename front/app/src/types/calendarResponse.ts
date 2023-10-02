@@ -8,4 +8,5 @@ export type CalendarResponse = {
 type CalendarEvent = {
   id: number;
   title: string;
+  decided_time: Date;
 };

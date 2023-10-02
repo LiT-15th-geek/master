@@ -13,10 +13,12 @@ export const CalendarListHeader = (props: Props) => {
     return (
         <>
             <div className={styles.header}>
-                <div className={styles.titleBar}>
+                <div className={styles.menuBar}>
                     <Image src={"/image/leftArrow.svg"} width={40} height={40} alt={"leftArrow"}/>
-                    <h2 className={styles.title}>{title}</h2>
                     <Link className={styles.userIcon} href={"/profile"}><Image src={"/image/defaultUserIcon.svg"} width={40} height={40} alt={"userIcon"}/></Link>
+                </div>
+                <div className={styles.titleBar}>
+                    <h2 className={styles.title}>{title}</h2>
                 </div>
                 <input className={styles.searchBar} type={"textbox"} id={"calendarSearch"} name={"calendarListSearchBar"} placeholder={"検索バー"}></input>
             </div>
