@@ -13,6 +13,14 @@
 ActiveRecord::Schema[7.0].define(version: 2023_10_01_102324) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  
+    create_table "calendars", force: :cascade do |t|
+      t.string "team_title"
+      t.string "description"
+      t.string "user_id"
+      t.boolean "is_private"
+      t.boolean "is_delete"
+    end 
 
   create_table "booked_users", force: :cascade do |t|
     t.integer "calendar_id"
