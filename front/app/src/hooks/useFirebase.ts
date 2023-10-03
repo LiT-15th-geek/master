@@ -76,7 +76,7 @@ export const useFirebase = () => {
           return result.user;
         }
       );
-      return result;
+      return "success";
     } catch (error) {
       console.error("ログインエラー:", error);
       throw error; // エラーを呼び出し元に伝播させる
@@ -92,10 +92,10 @@ export const useFirebase = () => {
   const emailSignIn = async (email: string, password: string) => {
     try {
       // メールアドレスとパスワードを使ってユーザーをログインさせます
-      const result = await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email, password);
 
       // ログインしたユーザー情報を返します
-      return result.user;
+      return "success"
     } catch (error) {
       if (error instanceof Error) {
         // エラーの型チェック
@@ -122,7 +122,7 @@ export const useFirebase = () => {
       );
 
       // 登録したユーザー情報を返します
-      return result.user;
+      return "success";
     } catch (error) {
       if (error instanceof Error) {
         // エラーの型チェック
