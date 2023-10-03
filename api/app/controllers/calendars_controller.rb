@@ -1,76 +1,21 @@
 class CalendarsController < ApplicationController
-    before_action :find_calendar, only: [:edit, :update, :destroy]
 
-    def index
-        render json: Calendar.all
-    end
-
-    #get 主催者
-    def new
-        @calendar = Calendar.new
-    end
-
-    def edit
-        if @calendar.user_id != params[:user_id].to_i
-            #Calendarが存在するけど、user_idが主催者のものではないから編集不可（エラー）
-            render plain: 'Unauthorized', status: :Unauthorized
-        else
-            #Calendarが存在して、user_idも主催者のものと一致するため編集可
-            #before_actionで書いてるけどもう一回書く必要ある、、？
-            @calendar = Calendar.find_by(calendar_id: params[:calendar_id])
-        end
-    end
-
-    #post 主催者
-    def create
-        #カレンダー新規作成
-        @calendar = Calendar.new(team_title: params[:team_title], description: params[:description], user_id: params[:user_id], is_private: params[:is_private], is_delete: params[:is_delete])
-
-        if @calendar.save
-            #保存出来たらマイページにリダイレクト(user_pathは仮)
-            redirect_to user_path
-        end
-    end
-
-    def update
-        if @calendar.user_id != params[:user_id].to_i
-            #Calendarが存在するけど、user_idが主催者のものではないから編集不可（エラー）
-            render plain: 'Unauthorized', status: :Unauthorized
-        else
-            #Calendarが存在して、user_idも主催者のものと一致するため編集
-            #もう一回書く必要ある、、？
-            @calendar = Calendar.update(team_title: params[:team_title], description: params[:description], user_id: params[:user_id], is_private: params[:is_private], is_delete: params[:is_delete])
-        end
-    end
-
-    def destroy
-        @calendar = Calendar.find_by(id: params[:id])
-        if @calendar.nil?
-          render plain: 'Calendar not found', status: :not_found
-        elsif @calendar.user_id != params[:user_id].to_i
-          render plain: 'Unauthorized', status: :unauthorized # :Unauthorized ではなく :unauthorized と小文字にする必要があります
-        else
-          @calendar.destroy
-          render plain: 'Calendar deleted', status: :ok # deleted successfully ではなく :ok とする必要があります
-        end
-      end
-
-    #get 参加者
-    def show
-        is_Private = Calendar.find(params[:id]).is_private
-        nicknameArray = []
-        nicknames = Calendar.joins(:bookedUser).select('nickname').where(id: params[:id])
-        nicknames.each do |nickname|
-            nicknameArray.push(nickname.nickname)
-        end
+    # #get 参加者
+    # def show
+    #     is_Private = Calendar.find(params[:id]).is_private
+    #     nicknameArray = []
+    #     nicknames = Calendar.joins(:bookedUser).select('nickname').where(id: params[:id])
+    #     nicknames.each do |nickname|
+    #         nicknameArray.push(nickname.nickname)
+    #     end
     
-        team_title = Calendar.find(params[:id]).team_title
-        render json: {
-          is_Private: is_Private,
-          nicknames: nicknames,
-          team_title: team_title
-        }
-    end
+    #     team_title = Calendar.find(params[:id]).team_title
+    #     render json: {
+    #       is_Private: is_Private,
+    #       nicknames: nicknames,
+    #       team_title: team_title
+    #     }
+    # end
 
     def authenticate
         targetBookedUser = Calendar.joins(:bookedUser).select('password,bookeduser.id').where(bookedusers: {nickname: params[:nickname]},id: params[:id])
@@ -129,8 +74,96 @@ class CalendarsController < ApplicationController
         end
     end
 
-    def find_calendar
-        @calendar = Calendar.find_by(calendar_id: params[:calendar_id])
+    def destroy
+        calendar = Calendar.find(params[:id])
+
+        if calendar.user_id == session[:user_id]
+            #カレンダーが正常に論理削除される処理
+            calendar.is_delete = true
+            render json: {state: true}
+        else
+            #論理削除できなかった場合
+            render json: {state: false}
+        end    
+    end
+
+    def edit
+        calendar = Calendar.find(params[:id])
+
+        is_Private = calendar.is_Private
+
+        nicknameArray = []
+        nicknames = Calendar.joins(:bookedUser).select('nickname').where(id: params[:id])
+
+        nicknames.each do |nickname|
+            nicknameArray.push(nickname.nickname)
+        end
+
+        team_title = calendar.team_title
+        description = calendar.description
+
+        render json: {
+            is_Private: is_Private,
+            nicknames: nicknames,
+            team_title: team_title
+            description: description
+        }
+    end
+
+    def new
+        @calendar = Calendar.new
+
+        rendar json: @calendar.to_json(only:[:team_title, :description, :is_Private])
+    end
+
+    def update
+        calendar = Calendar.find(params[:id])
+
+        if calendar.user_id == session[:user_id]
+            #カレンダー更新 チーム名と説明のみ更新可（is_privateとbookeduserは更新不可）
+            updated_calendar = calendar.update(calendar_params)
+            #正常に更新できた場合trueを返す
+            render json: {state: true}
+        else
+            #user_idが主催者のものではないため、正常に更新できない場合falseを返す
+            render json: {state: false}
+        end
+
+        redirect_to home/:user_id
+    end
+    
+    def create
+        #bookeduserがuser_idを持っていたら（アカウントを持っていたら）カレンダー作成可
+        if bookedUser.find(session[:user_id]).user_id
+            calendar = calendar.create(calendar_params.merge(user_id: session[:user_id], is_delete:false))
+
+            nicknameArray = params[:nicknameArray]
+            nicknameArray.each do |nickname|
+                random_password = generate(6)
+
+                new_bookeduser = bookedUser.create(calendar_id: calendar.id, nickname: nickname, user_id: session[:user_id])
+                if calendar.is_private
+                    random_password = generate_random_password(6)
+                    bookedUser.find(new_bookeduser.id).update(password: random_password)
+                end
+            end
+            render json: {state: true}
+        else
+            render json: {state: false}
+        end
+    end
+
+    #calendar paramsからデータ取り出し
+    def calendar_params
+        params.require(:calendar).permit(:team_title, :description, :is_private)
+    end
+
+    #ランダムパスワード生成　require sequrerandomが必要
+    def generate_random_password(length)
+        characters = ('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a
+        password = ''
+        length.times { password << characters[SecureRandom.random_number(characters.length)] }
+        password
     end
 
 end

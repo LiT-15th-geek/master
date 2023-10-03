@@ -1,33 +1,27 @@
 Rails.application.routes.draw do
   get '/user/:id', to: 'user#show', as: 'user'
 
-  #主催者のカレンダートップ画面表示
-  #get '/calendar/organizer/:user_id/:calendar_id/top', to: 'calendars#show', as: 'calendar'
-  #主催者が新しくカレンダーを作る画面を表示
-  get '/calendar/organizer/:user_id/new', to: 'calendars#new', as: 'new_calendar'
-  #主催者がすでにあるカレンダーの編集画面を表示
-  get '/calendar/organizer/:user_id/edit/:calendar_id', to: 'calendars#edit', as: 'edit_calendar'
-
-  #主催者が新しくカレンダーを作成
-  post '/calendar/organizer/:user_id/new', to: 'calendars#create'
-  #主催者がすでにあるカレンダーを編集
-  post '/calendar/organizer/:user_id/edit/:calendar_id', to: 'calendars#update'
-
-  #主催者がすでにあるカレンダーを削除
-  delete '/calendar/organizer/:user_id/delete/:calendar_id', to: 'calendars#destroy'
 
   #参加者が自分が参加しているカレンダーを表示
-  get '/calendar/participant/:calendar_id/:bookedUser_id', to: 'calendars#show'
-
-
-
+  # get '/calendar/participant/:calendar_id/:bookedUser_id', to: 'calendars#show'
 
   #URL踏んだ後名前選択画面
   get '/calendar/:id/bookedUser', to: 'calendars#show'
   put '/calendar/:id/bookedUser', to: 'calendars#authenticate'
 
-  #カレンダーのトップ画面
+  #カレンダーのトップ画面(主催者&参加者)
   get '/calendar/:id', to: 'calendars#top'
+  #カレンダー退出
   delete '/calendar/:id', to: 'calendar#exit'
+  #カレンダー削除（主催者）
+  delete '/calendar/:id', to: 'calendar#destroy'
+  #カレンダー編集画面表示
+  get '/calendar/:id/edit', to: 'calendar#edit'
+  #カレンダー新規作成画面表示
+  get '/calendar/new', to: 'calendar#new'
+  #カレンダー編集
+  put '/calendar/:id/edit', to: 'calendar#update'
+  #カレンダー作成
+  post 'calendar/new', to: 'calendar#create'
 
 end
