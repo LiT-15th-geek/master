@@ -122,7 +122,7 @@ export const useFirebase = () => {
       );
 
       // 登録したユーザー情報を返します
-      return result.user;
+      return "success";
     } catch (error) {
       if (error instanceof Error) {
         // エラーの型チェック

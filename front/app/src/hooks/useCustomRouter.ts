@@ -6,6 +6,9 @@ export const useCustomRouter = () => {
   const routerPush = (path: string) => {
     router.push(path);
   };
+  const routerBack = () => {
+    router.back();
+  };
 
-  return { routerPush, getQueryId };
+  return { routerPush, routerBack, getQueryId };
 };
