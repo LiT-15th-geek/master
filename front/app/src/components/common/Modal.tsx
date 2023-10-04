@@ -36,8 +36,8 @@ export const Modal = (props: Props) => {
               <button className={styles.closeButton} onClick={handleClose}>
                 <Image
                   src={"/image/close.svg"}
-                  width={50}
-                  height={50}
+                  width={40}
+                  height={40}
                   alt="close"
                 />
               </button>

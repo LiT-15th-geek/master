@@ -1,0 +1,64 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 20px;
+}
+
+.container p {
+  text-align: center;
+  color: #525252;
+}
+
+.activeButton {
+  width: 175px;
+  height: 50px;
+  border: none;
+  border-radius: 24px;
+  background: #e68147;
+  color: #f9f9f9;
+  cursor: pointer;
+}
+.buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+}
+.button {
+  width: 175px;
+  height: 50px;
+  border: #525252 1px solid;
+  border-radius: 24px;
+  background: transparent;
+  cursor: pointer;
+}
+.member {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.modalBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.modalTitle {
+  margin: 0 0 20px 0;
+}
+.password {
+  margin: 20px 0 ;
+  width: 175px;
+  height: 30px;
+  border-radius: 5px;
+  border: 1px solid #525252;
+  background: #f9f9f9;
+  box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.25) inset;
+  text-align: center;
+}

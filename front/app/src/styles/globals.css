@@ -95,6 +95,10 @@ a {
   text-decoration: none;
 }
 
+p{
+  color:#525252
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: #F9F9F9;
