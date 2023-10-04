@@ -22,11 +22,11 @@ export const CalendarEventBlock = (props: Props) => {
         <div className={styles.allEvents}>
             <h2>イベント一覧</h2>
             {nowEventList.map((event) => (
-                <CalendarEvent key={event.id} eventTitle={event.title || "イベント名"}/>
+                <CalendarEvent key={event.id} eventTitle={event.title || "イベント名"} imgUrl={"/image/editLogo.svg"}/>
             ))}
             <h2>終了済みのイベント一覧</h2>
             {endEventList.map((event) => (
-                <CalendarEvent key={event.id} eventTitle={event.title || "イベント名"}/>
+                <CalendarEvent key={event.id} eventTitle={event.title || "イベント名"} imgUrl={"/image/threeDots.svg"}/>
             ))}
         </div>
     )

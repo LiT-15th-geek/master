@@ -51,13 +51,15 @@
 }
 .allEvents h2{
     font-size: 24px;
+    color: #525252;
 }
 .eachEvents{
     display: flex;
     justify-content: space-between;
 }
-.eachEvents h2{
+.eachEvents h3{
     font-size: 18px;
+    color: #525252;
 }
 .eachEventDetails{
     display: flex;
@@ -66,4 +68,5 @@
 }
 .eachEventDetails p{
     font-size: 14px;
+    color: #525252;
 }

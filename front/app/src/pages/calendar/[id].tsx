@@ -4,7 +4,6 @@ import React from "react";
 import useSWR from "swr";
 import {CalendarResponse} from "@/types/calendarResponse";
 import {CalendarHead} from "@/components/calendar/CalendarHead";
-import {CalendarEvent} from "@/components/calendar/CalendarEvent";
 import {CalendarMain} from "@/components/calendar/CalendarMain";
 import {CalendarEventBlock} from "@/components/calendar/CalendarEventBlock";
 
@@ -23,8 +22,8 @@ const Calendar = () => {
   if (isLoading) return "Loading...";
 
     const CALENDAR = {
-        title: "カレンダー１",
-        description: "詳細１",
+        title: "インターン",
+        description: "〇〇のインターン生を集めたカレンダーです。月に1回から2回ほどイベントを開催しているため是非参加してみてください。",
         now_events: [
             {
                 id: 1,

@@ -3,10 +3,12 @@ import styles from "@/styles/Calendar.module.css";
 import Image from "next/image";
 type Props = {
     eventTitle: string;
+    imgUrl: string;
 }
 
 export const CalendarEvent = (props: Props) => {
     const { eventTitle } = props;
+    const { imgUrl } = props;
 
     return (
         <div className={styles.eachEvents}>
@@ -14,7 +16,7 @@ export const CalendarEvent = (props: Props) => {
             <div className={styles.eachEventDetails}>
                 <p>入力済み：</p>
                 <p>未入力：</p>
-                <Image src={"/image/editLogo.svg"} width={24} height={24} alt={"editLogo"}/>
+                <Image src={imgUrl} width={24} height={24} alt={"editLogo"}/>
             </div>
         </div>
     )
