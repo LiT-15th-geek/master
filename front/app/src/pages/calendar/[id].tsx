@@ -10,9 +10,9 @@ import {useFirebase} from "@/hooks/useFirebase";
 
 
 const Calendar = () => {
+    const {getUId} = useFirebase();
     const { getQueryId } = useCustomRouter();
     const checkUser = async () => {
-        const {getUId} = useFirebase();
         const user_id = await getUId();
         return user_id;
     };
