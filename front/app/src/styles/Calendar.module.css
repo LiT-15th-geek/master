@@ -3,6 +3,7 @@
     background-color: #D0D0D0;
 }
 .toolBar{
+    width: 90vw;
     display: flex;
     justify-content: space-between;
     margin-bottom: 28px;
@@ -45,25 +46,28 @@
     margin-top: 10px;
 }
 
-/*ここから↓CalendarEvent.tsx*/
-.events{
-
+/*ここから↓CalendarEventBlock.tsx*/
+.allEvents{
+    background-color: #D0D0D0;
 }
-.events h2{
+.allEvents h2{
     font-size: 24px;
     color: #525252;
-    margin-bottom: 17px;
-}
-.mainEvents{
-
 }
 .eachEvents{
     display: flex;
     justify-content: space-between;
 }
-.eventDetails{
-
+.eachEvents h3{
+    font-size: 18px;
+    color: #525252;
 }
-.doneEvents{
-
+.eachEventDetails{
+    display: flex;
+    width: 40vw;
+    justify-content: space-between;
+}
+.eachEventDetails p{
+    font-size: 14px;
+    color: #525252;
 }
