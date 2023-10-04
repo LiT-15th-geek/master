@@ -6,13 +6,18 @@ import {CalendarResponse} from "@/types/calendarResponse";
 import {CalendarHead} from "@/components/calendar/CalendarHead";
 import {CalendarMain} from "@/components/calendar/CalendarMain";
 import {CalendarEventBlock} from "@/components/calendar/CalendarEventBlock";
+import {useFirebase} from "@/hooks/useFirebase";
 
 
 const Calendar = () => {
   const { getQueryId } = useCustomRouter();
-
+  const checkUser = async () => {
+      const {getUId} = useFirebase();
+      const user_id = await getUId();
+      return user_id;
+  };
   const { data, error, isLoading } = useSWR<CalendarResponse>(
-    "",
+    `http://localhost:3000/calendar/${getQueryId}`,
     fetcher
   );
 
