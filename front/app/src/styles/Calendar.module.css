@@ -3,6 +3,7 @@
     background-color: #D0D0D0;
 }
 .toolBar{
+    width: 90vw;
     display: flex;
     justify-content: space-between;
     margin-bottom: 28px;
