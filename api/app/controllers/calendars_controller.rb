@@ -4,7 +4,7 @@ class CalendarsController < ApplicationController
     def show
         is_Private = Calendar.find(params[:id]).is_private
         nicknameArray = []
-        nicknames = Calendar.joins(:bookedUser).select('nickname').where(id: params[:id])
+        nicknames = Calendar.joins(:bookedUsers).select('nickname').where(id: params[:id])
         nicknames.each do |nickname|
             nicknameArray.push(nickname.nickname)
         end
@@ -19,7 +19,7 @@ class CalendarsController < ApplicationController
 
     def authenticate
         request_data = JSON.parse(request.body.read, symbolize_names: true)
-        targetBookedUser = Calendar.joins(:bookedUser).select('password,booked_user.id').where(booked_users: {nickname: request_data[:nickname]},id: params[:id])
+        targetBookedUser = Calendar.joins(:booked_users).select('password,booked_user.id').where(booked_users: {nickname: request_data[:nickname]},id: params[:id])
         if targetBookedUser.password == request_data[:password]
 
             render json: {state: true, bookedUser_id: targetBookedUser.id}
@@ -30,11 +30,10 @@ class CalendarsController < ApplicationController
 
     def top
         targetCalendar = Calendar.where(id:params[:id]).select('team_title, description, user_id')
-        nicknameArray = []
-        nicknames = BookedUser.where(calendar_id: params[:id]).select('nickname')
-        nicknames.each do |nickname|
-            nicknameArray.push(nickname.nickname)
-        end
+        users = BookedUser.where(calendar_id: params[:id]).select('nickname, password')
+        #nicknames.each do |nickname|
+            #    nicknameArray.push(nickname.nickname)
+        #end
         targetEvents = Event.where(calendar_id: params[:id]).select('title, decidedTime')
         futureEvents = []
         pastEvents = []
@@ -51,7 +50,7 @@ class CalendarsController < ApplicationController
 
         render json: {
           calendar: targetCalendar,
-          members: nicknameArray,
+          users: users,
           futureEvents: futureEvents,
           pastEvents: pastEvents
         }

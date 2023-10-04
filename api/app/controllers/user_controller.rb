@@ -39,7 +39,7 @@ class UserController < ApplicationController
         targetUser = User.find(params[:id])
         allCalendars = Calendar.where(user_id: params[:id])
 
-        participateCalendars = Calendar.joins(:BookedUser).where(booked_users:{ user_id: params[:id]}).select('id, team_title')
+        participateCalendars = Calendar.joins(:bookedUsers).where(booked_users:{ user_id: params[:id]}).select('id, team_title')
         participateCalendars.each do |participateCalendar|
             peventNumber = Event.where(calendar_id: participateCalendar.id).count
             participateCalendar.merge(count: peventNumber)
@@ -63,7 +63,7 @@ class UserController < ApplicationController
 
     def edit
         targetUser = User.find(params[:id]).select('name, icon')
-        targetUserAnswers = UserAnswer.joins(:question).where(questions: {is_default: true},user_id: params[:id]).select('questionTitle, answer')
+        targetUserAnswers = UserAnswer.joins(:questions).where(questions: {is_default: true},user_id: params[:id]).select('questionTitle, answer')
         render json: {userInfo: targetUser, questionAnswers: targetUserAnswers}
     end
 
