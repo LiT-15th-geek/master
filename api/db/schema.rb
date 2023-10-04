@@ -53,7 +53,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_04_070154) do
     t.string "user_id"
     t.boolean "RecurrenceSetting"
     t.integer "RequireTime"
-    t.datetime "desidedTime"
+    t.datetime "decidedTime"
     t.boolean "is_delete"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

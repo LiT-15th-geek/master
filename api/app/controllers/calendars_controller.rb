@@ -35,13 +35,14 @@ class CalendarsController < ApplicationController
         nicknames.each do |nickname|
             nicknameArray.push(nickname.nickname)
         end
-        targetEvents = Event.where(calendar_id: params[:id]).select('title, decidedTime')
+        targetEvents = Event.select(:event_title, :desidedTime).where(Calendar_id: params[:id])
         futureEvents = []
         pastEvents = []
 
         current_time = Time.current
+        # p targetEvents
         targetEvents.each do |targetEvent|
-            if targetEvent.decidedTime.nil? || targetEvent.decidedTime > current_time
+            if targetEvent.desidedTime.nil? || targetEvent.desidedTime > current_time
                 futureEvents << targetEvent
             else
                 pastEvents << targetEvent
