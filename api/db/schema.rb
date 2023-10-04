@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_02_192439) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_04_070154) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -53,8 +53,23 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_02_192439) do
     t.string "user_id"
     t.boolean "RecurrenceSetting"
     t.integer "RequireTime"
-    t.datetime "desidedTime"
+    t.datetime "decidedTime"
     t.boolean "is_delete"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.string "questionTitle"
+    t.boolean "is_default"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "user_answers", force: :cascade do |t|
+    t.string "user_id"
+    t.integer "question_id"
+    t.string "answer"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

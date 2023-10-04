@@ -10,21 +10,21 @@ import {useFirebase} from "@/hooks/useFirebase";
 
 
 const Calendar = () => {
-  const { getQueryId } = useCustomRouter();
-  const checkUser = async () => {
-      const {getUId} = useFirebase();
-      const user_id = await getUId();
-      return user_id;
-  };
-  const { data, error, isLoading } = useSWR<CalendarResponse>(
+    const { getQueryId } = useCustomRouter();
+    const checkUser = async () => {
+        const {getUId} = useFirebase();
+        const user_id = await getUId();
+        return user_id;
+    };
+    const { data, error, isLoading } = useSWR<CalendarResponse>(
     `http://localhost:3000/calendar/${getQueryId}`,
     fetcher
-  );
+    );
 
-  console.log(data);
+    console.log(data);
 
-  if (error) return "An error has occurred.";
-  if (isLoading) return "Loading...";
+    if (error) return "An error has occurred.";
+    if (isLoading) return "Loading...";
 
     const CALENDAR = {
         title: "インターン",
@@ -80,7 +80,7 @@ const Calendar = () => {
 
             </div>
         </>
-  )
+    )
 }
 
 export default Calendar;
