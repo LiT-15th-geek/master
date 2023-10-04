@@ -80,7 +80,7 @@ const Invited = () => {
                 className={styles.activeButton}
                 onClick={() =>
                   routerPush(
-                    `/login?calendar=${getQueryId}&bookedUserId=${user?.id}`
+                    `/?calendar=${getQueryId}&bookedUserId=${user?.id}`
                   )
                 }
               >
@@ -116,7 +116,7 @@ const Invited = () => {
               />
               <p>{user.nickname}</p>
             </div>
-            {data?.is_Private || (
+            {data?.is_Private && (
               <input
                 type="password"
                 placeholder="パスワードを入力"

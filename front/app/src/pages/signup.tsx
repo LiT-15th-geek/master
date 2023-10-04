@@ -28,7 +28,7 @@ const Signup = () => {
         setError("");
         // todo:signup後に確認画面に遷移する
         // DBにアカウント登録する処理を書く
-        routerPush("/login");
+        routerPush("/");
         return;
       }
       if (result === "auth/invalid-email") {
