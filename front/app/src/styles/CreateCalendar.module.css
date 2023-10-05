@@ -1,7 +1,7 @@
 .title {
   margin-top: 30px;
 }
-.title h2{
+.title h2 {
   margin-top: 38px;
 }
 
@@ -11,6 +11,13 @@
 
 .container input {
   width: 90vw;
+  height: 40px;
+  border: none;
+  background-color: #d9d9d9;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  font-size: 16px;
+  color: #525252;
 }
 
 .label {
@@ -32,10 +39,10 @@
 }
 
 .passwordBox {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .button_setting {
@@ -45,13 +52,13 @@
 .submit_button {
   width: 270px;
   height: 60px;
-  background-color: #E68147;
+  background-color: #e68147;
   border-radius: 30px;
   border: none;
 
   margin-top: 20px;
 }
 
-.submit_button h3{
+.submit_button h3 {
   color: #f9f9f9;
 }

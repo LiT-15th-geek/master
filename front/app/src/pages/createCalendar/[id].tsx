@@ -6,9 +6,10 @@ import { CreateCalendarInvitedResponse } from "@/types/createCalendar";
 import { fetcher } from "@/utils/fetcher";
 import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/common/Modal";
+import styles from "@/styles/CreateCalender[id].module.css";
 
 const CreateCalenderId = () => {
-  const { getQueryId,routerPush } = useCustomRouter();
+  const { getQueryId, routerPush } = useCustomRouter();
   const { data, isLoading, error } = useSWR<CreateCalendarInvitedResponse>(
     `${process.env.NEXT_PUBLIC_API_URL}calendar/new/${getQueryId}`,
     fetcher
@@ -20,7 +21,9 @@ const CreateCalenderId = () => {
   const copyToClipboard = async () => {
     if (typeof getQueryId === "string") {
       try {
-        await global.navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_BROWSER_URL}invited/${getQueryId}`);
+        await global.navigator.clipboard.writeText(
+          `${process.env.NEXT_PUBLIC_BROWSER_URL}invited/${getQueryId}`
+        );
       } catch (e) {
         console.log(e);
       }
@@ -29,23 +32,41 @@ const CreateCalenderId = () => {
   return (
     <div>
       <Modal isOpen={isOpen} handleClose={handleClose}>
-        <div>
+        <div className={styles.modal_password}>
           {data?.bookedUsers?.map((user, index) => (
-            <div key={index + 1}>
-              <Image src={""} width={50} height={50} alt="user_image" />
-              <p>{user.nickname}</p>
-              <p>{user.password}</p>
+            <div className={styles.modal_information} key={index + 1}>
+              <div className={styles.modal_member}>
+                <Image
+                  src="/image/userSmall.svg"
+                  width={24}
+                  height={24}
+                  alt="user_image"
+                />
+                <p>{user.nickname}</p>
+              </div>
+              <p className={styles.en}>{user.password}</p>
             </div>
           ))}
         </div>
       </Modal>
-      <div className={""}>
-        <Image src="/image/edit.svg" width={50} height={50} alt="edit_icon" />
-        <p>作成しました！</p>
-        <div>
-          <button onClick={copyToClipboard}>招待リンクをコピー</button>
-          <button onClick={handleOpen}>パスワードを表示</button>
-          <button onClick={()=>{routerPush(`/invited/${getQueryId}`)}}>カレンダーを見る</button>
+      <div className={styles.container}>
+        <Image src="/image/edit.svg" width={70} height={70} alt="edit_icon" />
+        <h3>作成しました！</h3>
+        <div className={styles.buttons}>
+          <button className={styles.button_white} onClick={copyToClipboard}>
+            <p>招待リンクをコピー</p>
+          </button>
+          <button className={styles.button_white} onClick={handleOpen}>
+            <p>パスワードを表示</p>
+          </button>
+          <button
+            className={styles.button_color}
+            onClick={() => {
+              routerPush(`/invited/${getQueryId}`);
+            }}
+          >
+            <p>カレンダーを見る</p>
+          </button>
         </div>
       </div>
     </div>
