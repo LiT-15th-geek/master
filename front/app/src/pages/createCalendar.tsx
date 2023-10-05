@@ -11,12 +11,14 @@ import {
   CreateCalendarResponse,
 } from "@/types/createCalendar";
 import { useCustomRouter } from "@/hooks/useCustomRouter";
+import { NextPage } from "next";
 
 type Inputs = {
   name: string;
   description: string;
 };
-const createCalendar = () => {
+
+const createCalendar:NextPage = () => {
   const { getUId } = useFirebase();
 
   const {
