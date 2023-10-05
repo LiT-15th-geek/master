@@ -85,62 +85,71 @@ const CreateCalendar:NextPage = () => {
           </div>
         </div>
       </Modal>
-      <h1>カレンダーを作成する</h1>
+      <div className={styles.title}>
+        <Label href="/image/arrow-down-circle.svg"></Label>
+        <h2>カレンダーを作成する</h2>
+      </div>
       <div className={styles.container}>
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-          <Label title="カレンダー名を入力" href={"/image/edit.svg"}>
-            <input type="text" {...register("name", { required: true })} />
-          </Label>
-          {errors.name && <span>This field is required</span>}
-          <label>
-            <p>詳細を入力</p>
-            <input
-              type="text"
-              {...register("description", { required: true })}
-            />
-          </label>
-
-          <Label href="/image/edit.svg" title="メンバー名を入力" />
-          {users.map((user, index) => {
-            return (
-              <div key={index + 1} className={styles.label}>
-                <Image
-                  src="/image/edit.svg"
-                  width={30}
-                  height={30}
-                  alt="edit_icon"
-                />
-                <p>{user}</p>
-              </div>
-            );
-          })}
-          <div>
-            <input type="text" ref={inputRef} />
-            <button
-              onClick={(e) => {
-                handleSetUsers(e);
-              }}
-            >
-              追加
+          <div className={styles.categories}>
+            <Label title="カレンダー名を入力" href={"/image/edit.svg"}></Label>
+              <input type="text" {...register("name", { required: true })} />
+            {errors.name && <span>This field is required</span>}
+            <label>
+              <p>詳細を入力</p>
+              <input
+                type="text"
+                {...register("description", { required: true })}
+              />
+            </label>
+          </div>
+          <div className={styles.categories}>
+            <Label href="/image/users.svg" title="メンバー名を入力" />
+            {users.map((user, index) => {
+              return (
+                <div key={index + 1} className={styles.label}>
+                  <Image
+                    src="/image/userSmall.svg"
+                    width={24}
+                    height={24}
+                    alt="edit_icon"
+                  />
+                  <p>{user}</p>
+                </div>
+              );
+            })}
+            <div>
+              <input type="text" ref={inputRef} />
+              <button className={styles.add_button}
+                onClick={(e) => {
+                  handleSetUsers(e);
+                }}
+              >
+                <Label href="/image/plusSquare.svg" />
+              </button>
+            </div>
+            {errors.description && <span>This field is required</span>}
+          </div>
+          <div className={styles.categories}>
+            <Label title="パスワードについて" href="/image/checkedbox.svg" />
+            <div className={styles.passwordBox}>
+              <p>パスワードをそれぞれに設定（自動生成）する</p>
+              <Image
+                src={isCheck ? "/image/checkedbox.svg" : "/image/checkbox.svg"}
+                width={23}
+                height={23}
+                alt="edit_icon"
+                onClick={() => {
+                  setIsCheck(!isCheck);
+                }}
+              />
+            </div>
+          </div>
+          <div className={styles.button_setting}>
+            <button type="submit" className={styles.submit_button}>
+              <h3>カレンダーを作成する</h3>
             </button>
           </div>
-          {errors.description && <span>This field is required</span>}
-          <Label title="パスワードについて" href="/image/edit.svg" />
-          <div className={styles.passwordBox}>
-            <p>パスワードをそれぞれに設定（自動生成）する</p>
-            <Image
-              src={isCheck ? "/image/checkedbox.svg" : "/image/checkbox.svg"}
-              width={23}
-              height={23}
-              alt="edit_icon"
-              onClick={() => {
-                setIsCheck(!isCheck);
-              }}
-            />
-          </div>
-          <button type="submit" className={styles.submit_button}>
-            カレンダーを作成する
-          </button>
         </form>
       </div>
     </div>
