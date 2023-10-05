@@ -4,11 +4,12 @@ import styles from "@/styles/Calendar.module.css";
 type Props = {
     calendarTitle: string;
     calendarDescription: string;
+    handleOpen: ()=>void;
 }
 
 export const CalendarHead = (props: Props) => {
-    const { calendarTitle } = props;
-    const {calendarDescription} = props;
+    const { calendarTitle , calendarDescription, handleOpen} = props;
+
 
     return (
         <div className={styles.header}>
@@ -21,7 +22,7 @@ export const CalendarHead = (props: Props) => {
                 <p>{calendarDescription}</p>
             </div>
             <div className={styles.menuBar}>
-                <div className={styles.menuMember}>
+                <div className={styles.menuMember} onClick={handleOpen}>
                     <Image src={"/image/defaultUserLogo.svg"} width={60} height={60} alt={"defaultUserLogo"}/>
                     <p>メンバー</p>
                 </div>
