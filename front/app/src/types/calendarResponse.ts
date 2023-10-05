@@ -1,12 +1,18 @@
 export type CalendarResponse = {
-  title: string;
-  description: string;
-  now_events: CalendarEvent[];
-  end_events: CalendarEvent[];
+  calendar: CalendarData; // カレンダー情報を含むオブジェクト
+  members: string[]; // メンバー名の配列
+  futureEvents: CalendarEventData[];
+  pastEvents: CalendarEventData[];
 };
 
-type CalendarEvent = {
-  id: number;
-  title: string;
-  decided_time: Date;
+type CalendarData = {
+  team_title: string;
+  description: string;
+  user_id: string;
+};
+
+export type CalendarEventData = {
+  event_title: string; // プロパティ名を修正
+  desidedTime: Date; // プロパティ名を修正
+  id: number | null; // idの型修正
 };

@@ -1,17 +1,10 @@
 import React from 'react'
 import {CalendarEvent} from "@/components/calendar/CalendarEvent";
 import styles from "@/styles/Calendar.module.css";
+import {CalendarEventData} from "@/types/calendarResponse";
 type Props = {
-    nowEventList: {
-            id: number;
-            title: string;
-            decided_time: Date;
-    }[];
-    endEventList: {
-            id: number;
-            title: string;
-            decided_time: Date;
-        }[];
+    nowEventList: CalendarEventData[];
+    endEventList: CalendarEventData[];
 }
 
 export const CalendarEventBlock = (props: Props) => {
@@ -22,11 +15,11 @@ export const CalendarEventBlock = (props: Props) => {
         <div className={styles.allEvents}>
             <h2>イベント一覧</h2>
             {nowEventList.map((event) => (
-                <CalendarEvent key={event.id} eventTitle={event.title || "イベント名"} imgUrl={"/image/editLogo.svg"}/>
+                <CalendarEvent key={event.id} eventTitle={event.event_title || "イベント名"} imgUrl={"/image/editLogo.svg"}/>
             ))}
             <h2>終了済みのイベント一覧</h2>
             {endEventList.map((event) => (
-                <CalendarEvent key={event.id} eventTitle={event.title || "イベント名"} imgUrl={"/image/threeDots.svg"}/>
+                <CalendarEvent key={event.id} eventTitle={event.event_title || "イベント名"} imgUrl={"/image/threeDots.svg"}/>
             ))}
         </div>
     )

@@ -26,6 +26,14 @@ const Calendar = () => {
     if (error) return "An error has occurred.";
     if (isLoading) return "Loading...";
 
+
+    // @ts-ignore
+    const calendarTitle = data?.calendar.team_title;
+    const calendarDesc = data?.calendar.description;
+    const futureEvents = data?.futureEvents;
+    const pastEvents = data?.pastEvents;
+    // console.log(calendarTitle)
+
     const CALENDAR = {
         title: "インターン",
         description: "〇〇のインターン生を集めたカレンダーです。月に1回から2回ほどイベントを開催しているため是非参加してみてください。",
@@ -69,13 +77,13 @@ const Calendar = () => {
                 <CalendarHead
                     // calendarTitle={data?.title || "カレンダー名"}
                     // calendarDescription={data?.description || "デフォルトの説明"}
-                    calendarTitle={CALENDAR.title || "カレンダー名"}
-                    calendarDescription={CALENDAR.description || "デフォルトの説明"}
+                    calendarTitle={ calendarTitle || "カレンダー名"}
+                    calendarDescription={ calendarDesc || "デフォルトの説明"}
                 />
                 <CalendarMain/>
                 <CalendarEventBlock
-                    nowEventList={CALENDAR.now_events}
-                    endEventList={CALENDAR.end_events}
+                    nowEventList={ futureEvents }
+                    endEventList={ pastEvents }
                 />
 
             </div>
