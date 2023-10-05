@@ -18,7 +18,7 @@ type Inputs = {
   description: string;
 };
 
-const CreateCalendar:NextPage = () => {
+const CreateCalendar: NextPage = () => {
   const { getUId } = useFirebase();
 
   const {
@@ -31,7 +31,7 @@ const CreateCalendar:NextPage = () => {
   const [isCheck, setIsCheck] = React.useState<boolean>(false);
   const [request, setRequest] = React.useState<CreateCalendarRequest>();
   const { isOpen, handleClose, handleOpen } = useModal();
-  const { routerPush } = useCustomRouter();
+  const { routerPush, routerBack } = useCustomRouter();
 
   const handleSetUsers = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -86,14 +86,20 @@ const CreateCalendar:NextPage = () => {
         </div>
       </Modal>
       <div className={styles.title}>
-        <Label href="/image/arrow-down-circle.svg"></Label>
+        <Image
+          src="/image/leftArrow.svg"
+          width={30}
+          height={30}
+          alt="back_icon"
+          onClick={routerBack}
+        />
         <h2>カレンダーを作成する</h2>
       </div>
       <div className={styles.container}>
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           <div className={styles.categories}>
             <Label title="カレンダー名を入力" href={"/image/edit.svg"}></Label>
-              <input type="text" {...register("name", { required: true })} />
+            <input type="text" {...register("name", { required: true })} />
             {errors.name && <span>This field is required</span>}
             <label>
               <p>詳細を入力</p>
@@ -120,12 +126,18 @@ const CreateCalendar:NextPage = () => {
             })}
             <div>
               <input type="text" ref={inputRef} />
-              <button className={styles.add_button}
+              <button
+                className={styles.add_button}
                 onClick={(e) => {
                   handleSetUsers(e);
                 }}
               >
-                <Label href="/image/plusSquare.svg" />
+                <Image
+                  src="/image/plusSquare.svg"
+                  width={30}
+                  height={30}
+                  alt="add_icon"
+                />
               </button>
             </div>
             {errors.description && <span>This field is required</span>}
