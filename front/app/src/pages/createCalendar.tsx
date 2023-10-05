@@ -18,7 +18,7 @@ type Inputs = {
   description: string;
 };
 
-const createCalendar:NextPage = () => {
+const CreateCalendar:NextPage = () => {
   const { getUId } = useFirebase();
 
   const {
@@ -147,4 +147,4 @@ const createCalendar:NextPage = () => {
   );
 };
 
-export default createCalendar;
+export default CreateCalendar;
