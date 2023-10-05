@@ -12,6 +12,7 @@ import {Modal} from "@/components/common/Modal";
 import {useModal} from "@/hooks/useModal";
 import styles from "@/styles/Calendar.module.css";
 import Image from "next/image";
+import {CalendarLeave} from "@/components/calendar/CalendarLeave";
 
 
 const Calendar = () => {
@@ -39,7 +40,6 @@ const Calendar = () => {
     const futureEvents = data?.futureEvents;
     const pastEvents = data?.pastEvents;
     const memberList = data?.members;
-    // console.log(calendarTitle)
 
     return (
         <>
@@ -66,6 +66,9 @@ const Calendar = () => {
                     ))}
                 </div>
             </Modal>
+            {/*<Modal isOpen={isOpen} handleClose={handleClose}>*/}
+            {/*    <CalendarLeave/>*/}
+            {/*</Modal>*/}
         </>
     )
 };
