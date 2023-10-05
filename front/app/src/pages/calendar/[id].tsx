@@ -10,6 +10,8 @@ import {CalendarEventBlock} from "@/components/calendar/CalendarEventBlock";
 import {useFirebase} from "@/hooks/useFirebase";
 import {Modal} from "@/components/common/Modal";
 import {useModal} from "@/hooks/useModal";
+import styles from "@/styles/Calendar.module.css";
+import Image from "next/image";
 
 
 const Calendar = () => {
@@ -58,7 +60,7 @@ const Calendar = () => {
 
             </div>
             <Modal isOpen={isOpen} handleClose={handleClose}>
-                <div>
+                <div className={styles.memberModal}>
                     {memberList?.map((member) => (
                         <CalendarMembers memberName={member || "メンバー"}/>
                     ))}

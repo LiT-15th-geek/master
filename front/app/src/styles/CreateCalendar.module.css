@@ -1,0 +1,57 @@
+.title {
+  margin-top: 30px;
+}
+.title h2{
+  margin-top: 38px;
+}
+
+.container {
+  margin-top: 17px;
+}
+
+.container input {
+  width: 90vw;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.categories {
+  margin-bottom: 20px;
+}
+
+.add_button {
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+}
+
+.passwordBox {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.button_setting {
+  text-align: center;
+}
+
+.submit_button {
+  width: 270px;
+  height: 60px;
+  background-color: #E68147;
+  border-radius: 30px;
+  border: none;
+
+  margin-top: 20px;
+}
+
+.submit_button h3{
+  color: #f9f9f9;
+}
