@@ -8,6 +8,8 @@ import { useModal } from "@/hooks/useModal";
 import { useCustomRouter } from "@/hooks/useCustomRouter";
 import { NextPage } from "next";
 import { CreateEventRequest } from "@/types/createEvent";
+import styles from "@/styles/CreateEvent.module.css";
+import { SignInMethod } from "firebase/auth";
 
 type Inputs = {
   event_title: string;
@@ -76,7 +78,6 @@ const CreateEvent: NextPage = () => {
     }
   };
   const onSubmit = async (data: Inputs) => {
-    
     handleOpen();
     setRequest({
       event_title: data.event_title,
@@ -114,15 +115,19 @@ const CreateEvent: NextPage = () => {
   return (
     <div>
       <Modal isOpen={isOpen} handleClose={handleClose}>
-        <div className={""}>
-          <p>イベントを作成しますか？</p>
-          <div>
-            <button onClick={handleCreateEvent}>作成する</button>
-            <button onClick={handleClose}>作成しない</button>
+        <div className={styles.check}>
+          <h3>イベントを作成しますか？</h3>
+          <div className={styles.check_button}>
+            <button className={styles.check_yes} onClick={handleCreateEvent}>
+              <p>作成する</p>
+            </button>
+            <button className={styles.check_no} onClick={handleClose}>
+              <p>作成しない</p>
+            </button>
           </div>
         </div>
       </Modal>
-      <div className={""}>
+      <div className={styles.header}>
         <Image
           src="/image/leftArrow.svg"
           width={30}
@@ -132,9 +137,9 @@ const CreateEvent: NextPage = () => {
         />
         <h2>イベントを作成する</h2>
       </div>
-      <div className={""}>
+      <div className={styles.container}>
         <form onSubmit={handleSubmit(onSubmit)} className={""}>
-          <div>
+          <div className={styles.item}>
             <Label title="イベント名を入力" href={"/image/edit.svg"}>
               <input
                 type="text"
@@ -150,20 +155,24 @@ const CreateEvent: NextPage = () => {
               />
             </label>
           </div>
-          <div>
-            <Label href="/image/users.svg" title="期間を入力" />
-            <div>
+          <div className={styles.item}>
+            <Label href="/image/clock.svg" title="期間を入力" />
+            <div className={styles.term}>
               <label>
                 <p>開始日</p>
                 <input
+                  className={styles.term}
                   type="text"
                   {...register("term_start_day", { required: true })}
                 />
               </label>
-              ー
+              <div className={styles.hyphen}>
+                <h1>-</h1>
+              </div>
               <label>
                 <p>終了日</p>
                 <input
+                  className={styles.term}
                   type="text"
                   {...register("term_end_day", { required: true })}
                 />
@@ -176,52 +185,64 @@ const CreateEvent: NextPage = () => {
                 {...register("requireTime", { required: true })}
               />
             </label>
-            <Label title="開催場所を入力" href={"/image/edit.svg"}>
+          </div>
+          <div className={styles.item}>
+            <Label title="開催場所を入力" href={"/image/mapPin.svg"}>
               <input
                 type="text"
                 {...register("location", { required: true })}
               />
             </Label>
-            <Label title="メンバーの重要度を入力" href={"/image/edit.svg"} />
-            {users.map((user, index) => (
+          </div>
+          <div className={styles.item}>
+            <Label title="メンバーの重要度を入力" href={"/image/users.svg"} />
+            <div className={styles.user_priority}>
+              {users.map((user, index) => (
+                <div key={index + 1}>
+                  <div className={styles.user_info}>
+                    <Image
+                      src="/image/userSmall.svg"
+                      width={24}
+                      height={24}
+                      alt="edit_icon"
+                    />
+                    <p>{user.name}</p>
+                  </div>
+                  <div className={styles.priority_items}>
+                    {Priorities.map((priority, index) => (
+                      <label key={index + 1}>
+                        <p>{priority.name}</p>
+                        <input
+                          type="checkbox"
+                          {...register("members.0.priority")}
+                          style={{ display: "none" }}
+                        />
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className={styles.item}>
+            <Label title="質問" href={"/image/questions.svg"} />
+            {/* 質問一覧 */}
+            {questions.map((question, index) => (
               <div key={index + 1}>
-                <div>
+                <div className={styles.default_question}>
+                  <p>{question.question}</p>
                   <Image
-                    src="/image/userSmall.svg"
+                    src="/image/checkbox.svg"
                     width={24}
                     height={24}
                     alt="edit_icon"
                   />
-                  <p>{user.name}</p>
                 </div>
-                {Priorities.map((priority, index) => (
-                  <label key={index + 1}>
-                    <p>{priority.name}</p>
-                    <input
-                      type="checkbox"
-                      {...register("members.0.priority")}
-                      style={{ display: "none" }}
-                    />
-                  </label>
-                ))}
-              </div>
-            ))}
-            <Label title="質問" href={"/image/edit.svg"} />
-            {/* 質問一覧 */}
-            {questions.map((question, index) => (
-              <div key={index + 1}>
-                <p>{question.question}</p>
-                <Image
-                  src="/image/userSmall.svg"
-                  width={24}
-                  height={24}
-                  alt="edit_icon"
-                />
               </div>
             ))}
 
             {/* 質問作成*/}
-            <div>
+            <div className={styles.original_question}>
               <input type="text" ref={inputRef} />
               <button
                 onClick={(e) => {
@@ -237,7 +258,7 @@ const CreateEvent: NextPage = () => {
               </button>
             </div>
           </div>
-          <div>
+          <div className={styles.decide_button}>
             <button type="submit">
               <h3>イベントを作成する</h3>
             </button>

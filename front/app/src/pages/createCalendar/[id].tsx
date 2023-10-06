@@ -6,7 +6,7 @@ import { CreateCalendarInvitedResponse } from "@/types/createCalendar";
 import { fetcher } from "@/utils/fetcher";
 import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/common/Modal";
-import styles from "@/styles/CreateCalender[id].module.css";
+import styles from "@/styles/CreateCalenderid.module.css";
 
 const CreateCalenderId = () => {
   const { getQueryId, routerPush } = useCustomRouter();
