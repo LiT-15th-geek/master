@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_04_070154) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_06_051128) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -43,6 +43,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_04_070154) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "event_questions", force: :cascade do |t|
+    t.integer "question_id"
+    t.integer "event_id"
+    t.boolean "is_selected"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "events", force: :cascade do |t|
     t.integer "Calendar_id"
     t.string "event_title"
@@ -53,8 +61,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_04_070154) do
     t.string "user_id"
     t.boolean "RecurrenceSetting"
     t.integer "RequireTime"
-    t.datetime "decidedTime"
+    t.datetime "desidedTime"
     t.boolean "is_delete"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "question_answers", force: :cascade do |t|
+    t.integer "question_id"
+    t.integer "BookedUser_id"
+    t.string "answer"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
