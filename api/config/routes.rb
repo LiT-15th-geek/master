@@ -35,4 +35,17 @@ Rails.application.routes.draw do
   #プロフィール編集を保存
   post '/user/:id/settings', to:'user#update'
 
+  #イベントのトップ画面表示
+  get '/event/:id/top/:bookedUser_id', to:'event#show'
+  #質問に解答した時
+  post '/event/:id/answer', to: 'event#answer'
+  #開催日時の決定
+  post '/event/:id/decide', to: 'event#decide'
+  #日付入力
+  post '/event/:id/input', to:'event#input'
+  #イベント編集画面表示
+  get '/event/:id/input', to:'event#edit'
+  #イベント新規作成・保存
+  post '/event/save', to:'event#create'
+
 end

@@ -1,3 +1,3 @@
 class Event < ApplicationRecord
-  has_many :BookedUserSchedule
+  has_many :BookedUserSchedules
 end

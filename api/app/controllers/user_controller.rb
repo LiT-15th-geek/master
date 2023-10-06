@@ -26,7 +26,8 @@ class UserController < ApplicationController
 
             #招待URL踏んで入った時、UserCalendarにuser_id登録
             calendar_id = Bookeduser.find(request_data[:bookedUser_id]).calendar_id
-            UserCalendar.create(user_id: user_params, calendar_id: calendar_id)
+            UserCalendar.create(user_id: user_params, calendar_id: calendar_id
+
             render json: {invite: true, calendar_id: calendar_id}
         else
             #いきなりログインページにアクセスされた
@@ -39,7 +40,7 @@ class UserController < ApplicationController
         targetUser = User.find(params[:id])
         allCalendars = Calendar.where(user_id: params[:id])
 
-        participateCalendars = Calendar.joins(:BookedUser).where(booked_users:{ user_id: params[:id]}).select('id, team_title')
+        participateCalendars = Calendar.joins(:bookedUsers).where(booked_users:{ user_id: params[:id]}).select('id, team_title')
         participateCalendars.each do |participateCalendar|
             peventNumber = Event.where(calendar_id: participateCalendar.id).count
             participateCalendar.merge(count: peventNumber)
@@ -63,7 +64,7 @@ class UserController < ApplicationController
 
     def edit
         targetUser = User.find(params[:id]).select('name, icon')
-        targetUserAnswers = UserAnswer.joins(:question).where(questions: {is_default: true},user_id: params[:id]).select('questionTitle, answer')
+        targetUserAnswers = UserAnswer.joins(:questions).where(questions: {is_default: true},user_id: params[:id]).select('questionTitle, answer')
         render json: {userInfo: targetUser, questionAnswers: targetUserAnswers}
     end
 
