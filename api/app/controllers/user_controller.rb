@@ -26,7 +26,8 @@ class UserController < ApplicationController
 
             #招待URL踏んで入った時、UserCalendarにuser_id登録
             calendar_id = Bookeduser.find(request_data[:bookedUser_id]).calendar_id
-            UserCalendar.create(user_id: user_params, calendar_id: calendar_id)
+            UserCalendar.create(user_id: user_params, calendar_id: calendar_id
+
             render json: {invite: true, calendar_id: calendar_id}
         else
             #いきなりログインページにアクセスされた
