@@ -100,8 +100,8 @@ class EventsController < ApplicationController
 
     addQuestions = request_data[:additionalQuestions]
     addQuestions.each do |addQuestion|
-      additionalQuestion = Questions.find_or_initialize_by(title: addQuestion[:title])
-      additionalQuestion.update(title: addQuestion[:title], is_default: false)
+      additionalQuestion = Questions.find_or_initialize_by(title: addQuestion)
+      additionalQuestion.update(title: addQuestion, is_default: false)
 
       addEventQuestions = EventQuestions.find_or_initialize_by(question_id: additionalQuestion.id)
       addEventQuestions.update({question_id: additionalQuestion.id, event_id: request_data[:event_id]})

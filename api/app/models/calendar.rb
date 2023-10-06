@@ -1,3 +1,3 @@
 class Calendar < ApplicationRecord
-    has_many :bookedUsers
+    has_many :booked_users
 end

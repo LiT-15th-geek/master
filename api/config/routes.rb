@@ -26,6 +26,11 @@ Rails.application.routes.draw do
   #カレンダー作成しました画面
   get '/calendar/new/:id', to: 'calendars#created'
 
+  #参加/主催カレンダー一覧表示
+  get '/user/:id/calendar/participate', to: 'calendars#participate'
+  get '/user/:id/calendar/organize', to:  'calendars#organize
+
+
   #ログイン/新規作成
   post '/user/new', to: 'user#login'
   #マイページ表示
