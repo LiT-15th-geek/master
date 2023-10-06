@@ -76,8 +76,7 @@ const CreateEvent: NextPage = () => {
     }
   };
   const onSubmit = async (data: Inputs) => {
-    if (errors) return;
-    if (users.length === 0) return;
+    
     handleOpen();
     setRequest({
       event_title: data.event_title,
