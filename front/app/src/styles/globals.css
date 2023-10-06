@@ -72,6 +72,16 @@
     --card-border-rgb: 200, 200, 200;
   }
 }
+  
+  @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,500&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap');
+
+/*
+  〜フォントの指定方法〜
+  日本語：
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  英数字：
+  font-family: 'Nunito Sans', sans-serif;
+*/
 
 * {
   box-sizing: border-box;
@@ -86,13 +96,6 @@ body {
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
   padding-left: 5vw;
   padding-right: 5vw;
 }
@@ -102,8 +105,37 @@ a {
   text-decoration: none;
 }
 
+h1 {
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-size: 32px;
+  color: #525252;
+  font-weight: medium;
+}
+
+h2 {
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-size: 24px;
+  color: #525252;
+  font-weight: medium;
+}
+
+h3 {
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-size: 18px;
+  color: #525252;
+  font-weight: normal;
+}
+
+p {
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-size: 14px;
+  color: #525252;
+  font-weight: normal;
+}
+
+
 @media (prefers-color-scheme: dark) {
   html {
-    color-scheme: dark;
+    color-scheme: #F9F9F9;
   }
 }

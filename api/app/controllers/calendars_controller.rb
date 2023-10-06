@@ -37,8 +37,9 @@ class CalendarsController < ApplicationController
         pastEvents = []
 
         current_time = Time.current
+        # p targetEvents
         targetEvents.each do |targetEvent|
-            if targetEvent.decidedTime.nil? || targetEvent.decidedTime > current_time
+            if targetEvent.desidedTime.nil? || targetEvent.desidedTime > current_time
                 futureEvents << targetEvent
             else
                 pastEvents << targetEvent
