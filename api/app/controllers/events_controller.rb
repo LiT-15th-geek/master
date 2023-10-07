@@ -1,16 +1,35 @@
 class EventsController < ApplicationController
   def show
-    #pointsはロジックかけた後の結果
-    # pointカラム未実装
-    points = BookedUserSchedule.select(:startTime, :endTime, :point).where(event_id: params[:id]).sort_by(&:point).reverse
 
+    dayArray = []
+    deadPoints = BookedUserSchedule.where(event_id: params[:id], alive: false).group(:day)
+    deadPoints.each do |deadPoint|
+      dayArray << {day: deadPoint.day, point: 0}
+    end
 
+    othersSchedule = BookedUserSchedule.where(event_id: params[:id], alive: true).select(:startTime, :endTime, :point).sort_by(&:point).reverse.first(5)
+
+    dayPoints = BookedUserSchedule.where(event_id: params[:id], alive: true).group(:day).maximum(:point)
+    thatEvent = Event.find(params[:id])
+    membersNumber = BookedUser.joins(:priorities).where(priorities: {must: false}, calendar_id: thatEvent.Calendar_id).count
+
+    BookedUserSchedule.group(:BookedUser_id).count
+
+    dayPoints.each do |dayPoint|
+      pointAvarage = dayPoint.point / membersNumber
+      if pointAvarage > membersNumber * 2.5
+        point = 60
+      elsif pointAvarage > membersNumber * 1.5
+        point = 40
+      else
+        point = 20
+      end
+      dayArray << {day: dayPoint.day, point: point}
+    end
 
     bookedUser= BookedUser.find(params[:bookeduser_id])
     calendars = Calendar.where(id: bookedUser.calendar_id)
-
     schedule = []
-
     calendars.each do |calendar|
       events = Event.where(Calendar_id: calendar.id)
       events.each do |event|
@@ -21,25 +40,36 @@ class EventsController < ApplicationController
       end
     end
 
+    allQuestions = BookedUser.joins(question_answers: :question).select('questions.questionTitle').where(questions: {is_default: true} )
+    allQuestionsArray = []
+    allQuestions.each do |allQuestion|
+      allQuestionsArray << allQuestion.questionTitle
+    end
+
     targetEvent = Event.find(params[:id])
     members = BookedUser.joins(:priorities).select('booked_users.nickname, priorities.priority, priorities.must').where(id: params[:bookeduser_id])
-    organizerQuestionArray =BookedUser.joins(question_answers: :question).select('booked_users.nickname, questions.answer').where(questions: {is_default: true} ).group(:title)
+    organizerQuestionArrays =BookedUser.joins(question_answers: :question).select('booked_users.nickname, questions.answer, questions.questionTitle').where(questions: {is_default: true} )
+    organizerQuestionArray = organizerQuestionArrays.group_by { |questionO| questionO[:questionTitle] }
     participantQuestionArray = BookedUser.joins(question_answers: :question).select('questions.questionTitle, questions.id question_answers.answer').where(id: params[:bookeduser_id])
+
+    mySchedule = BookedUserSchedule.where(BookedUser_id: params[:bookeduser_id], event_id: params[:id]).group_by { |eachDay| eachDay[:day] }
 
     render json:{
       targetEvent: targetEvent,
       members: members,
+      allQuestions: allQuestionsArray,
       organizerQuestionArray: organizerQuestionArray,
       participantQuestionArray: participantQuestionArray,
-      schedule: schedule,
-      points: points
+      decidedTime: schedule,
+      dayArray: dayArray,
+      mySchedule: mySchedule,
+      othersSchedule: othersSchedule
     }
 
 
   end
 
   def answer
-
     request_data = JSON.parse(request.body.read, symbolize_names: true)
     targetQuestionAnswer = QuestionAnswer.find_or_initialize_by(BookedUser_id: request_data[:bookeduser_id], question_id: request_data[:question_id],answer: request_data[:answer])
     targetQuestionAnswer.update({
@@ -58,9 +88,16 @@ class EventsController < ApplicationController
   def input
     request_data = JSON.parse(request.body.read, symbolize_names: true)
     if request_data[:bookedUser_id]
-      BookedUserSchedule.create(BookedUser_id: request_data[:bookedUser_id],startTime: request_data[:startTime],endTime: request_data[:endTime],vague: request_data[:vague])
-    end
-end
+      day = request_data[:bookedUser_id].to_date
+      targetSchedule = BookedUserSchedule.find_or_initialize_by(BookedUser_id: request_data[:bookedUser_id], day: day)
+      targetSchedule.update({
+                              startTime: request_data[:startTime],
+                              endTime: request_data[:endTime],
+                              vague: request_data[:vague]
+                            })
+      end
+      calculate(params[:id])
+  end
 
   def edit
     targetEvent = Event.find(params[:id])
@@ -125,8 +162,11 @@ end
                         is_selected: question[:is_selected]
                       })
     end
+
+    calculate(params[:id])
   end
 
+  private
   #計算ロジック
   def calculate(event_id)
     #Mustユーザーの入力したスケジュール全件取得
@@ -146,62 +186,65 @@ end
 
     event_records = BookedUserSchedule.where(event_id: event_id)
 
-    Must_number = Priority.where(event_id: event_id, must: true).count
-    if Must_number >= 2
+    must_number = Priority.where(event_id: event_id, must: true).count
+    if must_number >= 2
       event_records.where(alive: true).each do |record1|
         date_value = record1.startTime.strftime('%Y-%m-%d')
         event_records.where("DATE(startTime) = ? and alive = ?", date_value, true).each do |record2|
           next if record1 == record2
-          STARTTIME = record1.startTime.to_i
-          ENDTIME = record1.endTime.to_i
+          #STARTTIME を　startTime1に変更
+          startTime1 = record1.startTime.to_i
+          #ENDTIMEをendTime1に変更
+          endTime = record1.endTime.to_i
           starttime = record2.startTime.to_i
           endtime = record2.endTime.to_i
           #パターン2の比較
-          if starttime < STARTTIME && STARTTIME < endtime && endtime < ENDTIME
-            if endtime - STARTTIME < requireTime
+          if starttime < startTime1 && startTime1 < endtime && endtime < endTime
+            if endtime - startTime1 < requireTime
               other_records = event_records.where("DATE(startTime) = ? and alive = ? and BookedUser_id = ?", date_value, true, record1.BookedUser_id)
               if other_records.nil?
                 BookedUserSchedule.find(record2.id).alive = false
               else
-                FLAG = 0
+                #FLAGをflagに変更
+                flag = 0
                 other_records.each do |other_record|
-                  if other_record.endTime < STARTTIME && starttime < other_record.endTime
+                  if other_record.endTime < startTime1 && starttime < other_record.endTime
                     if other_record.endTime - starttime > requireTime
-                      FLAG = 1
+                      flag = 1
                     end
                   else
                     BookedUserSchedule.find(record2.id).alive = false
                   end
                 end
-                if FLAG = 0
+                if flag == 0
                   BookedUserSchedule.find(record2.id).alive = false
                 end
               end
             end
           #パターン3の比較
-          elsif STARTTIME < starttime && starttime < ENDTIME && ENDTIME < endtime
-            if ENDTIME - starttime < requireTime
+          elsif startTime1 < starttime && starttime < endTime && endTime < endtime
+            if endTime - starttime < requireTime
               other_records = BookedUserSchedule.where("DATE(startTime) = ? and alive = ? and BookedUser_id = ?", date_value, true, record1.BookedUser_id)
               if other_records.nil?
                 BookedUserSchedule.find(record2.id).alive = false
               else
-                FLAG = 0
+                flag = 0
                 other_records.each do |other_record|
-                  if ENDTIME < other_record.startTime && other_record.startTime < endtime
+                  if endTime < other_record.startTime && other_record.startTime < endtime
                     if endtime - other_record.startTime > requireTime
-                      FLAG = 1
+                      flag = 1
                     end
                   else
                     BookedUserSchedule.find(record2.id).alive = false
                   end
                 end
-                if FLAG = 0
+                if flag == 0
                   BookedUserSchedule.find(record2.id).alive = false
                 end
               end
             end
           #パターン4の比較
-          elsif STARTTIME < starttime && endtime < ENDTIME
+          elsif startTime1 < starttime && endtime < endTime
             if endtime - starttime < requireTime
               BookedUserSchedule.find(record2.id).alive = false
             end
@@ -218,21 +261,23 @@ end
       normal_records.each do |normal_record|
         priority_point = Priority.where(event_id: event_id, BookedUser_id: normal_record.BookedUser_id).priority
         vague_point = priority_point - 0.5
-        STARTTIME = alive_record.startTime.to_i
-        ENDTIME = alive_record.endTime.to_i
+        #STARTTIMEをstartTime2に変更
+        startTime2 = alive_record.startTime.to_i
+        #ENDTIMEをendTime2に変更
+        endTime2 = alive_record.endTime.to_i
         starttime = normal_record.startTime.to_i
         endtime = normal_record.endTime.to_i
         added_record = BookedUserSchedule.find(alive_record.id)
         #パターン1
-        if starttime < STARTTIME && ENDTIME < endtime
+        if starttime < startTime2 && endTime2 < endtime
           if normal_record.vague == true
             added_record.update(point: added_record.point + vague_point)
           else
             added_record.update(point: added_record.point + priority_point)
           end
         #パターン2
-        elsif starttime < STARTTIME && STARTTIME < endtime && endtime < ENDTIME
-          if endtime - STARTTIME > requireTime
+        elsif starttime < startTime2 && startTime2 < endtime && endtime < endTime2
+          if endtime - startTime2 > requireTime
             if normal_record.vague == true
               added_record.update(point: added_record.point + vague_point)
             else
@@ -240,8 +285,8 @@ end
             end
           end
         #パターン3
-        elsif STARTTIME < starttime && starttime < ENDTIME && ENDTIME < endtime
-          if ENDTIME - starttime > requireTime
+        elsif startTime2 < starttime && starttime < endTime2 && endTime2 < endtime
+          if endTime2 - starttime > requireTime
             if normal_record.vague == true
               added_record.update(point: added_record.point + vague_point)
             else
@@ -249,7 +294,7 @@ end
             end
           end
         #パターン4
-        elsif STARTTIME < starttime && endtime < ENDTIME
+        elsif startTime2 < starttime && endtime < endTime2
           if endtime - starttime > requireTime
             if normal_record.vague == true
               added_record.update(point: added_record.point + vague_point)
