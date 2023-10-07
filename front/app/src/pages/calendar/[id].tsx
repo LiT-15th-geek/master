@@ -60,8 +60,9 @@ const Calendar = () => {
             </div>
             <Modal isOpen={isOpen} handleClose={handleClose}>
                 <div className={styles.memberModal}>
-                    {memberList?.map((member) => (
-                        <CalendarMembers memberName={member['nickname'] || "メンバー"}/>
+                    {memberList?.map((member, nickname) => (
+                        // @ts-ignore
+                        <CalendarMembers key={nickname} memberName={member['nickname'] || "メンバー"}/>
                     ))}
                 </div>
             </Modal>

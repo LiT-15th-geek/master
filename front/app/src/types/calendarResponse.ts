@@ -5,6 +5,11 @@ export type CalendarResponse = {
   pastEvents: CalendarEventData[];
 };
 
+type Users = {
+  nickname: string;
+  password: string;
+}
+
 type CalendarData = {
   team_title: string;
   description: string;
