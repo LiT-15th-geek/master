@@ -11,8 +11,8 @@ class EventsController < ApplicationController
     calendars.each do |calendar|
       events = Event.where(Calendar_id: calendar.id)
       events.each do |event|
-        unless event.decidedDate.nil?
-          eachSchedule = Event.select(:decidedTime, :event_title).find(event.id)
+        unless event.desidedtime.nil?
+          eachSchedule = Event.select(:desidedTime, :event_title).find(event.id)
           eachSchedule >> schedule
         end
       end
@@ -47,7 +47,7 @@ class EventsController < ApplicationController
   def decide
     request_data = JSON.parse(request.body.read, symbolize_names: true)
     targetEvent = Event.find_or_initialize_by(id: params[:id])
-    targetEvent.update(decidedTime: request_data[:decidedTime])
+    targetEvent.update(desidedTime: request_data[:decidedTime])
   end
 
   def input
