@@ -3,25 +3,25 @@ class CalendarsController < ApplicationController
     # #get 参加者
     def show
         is_Private = Calendar.find(params[:id]).is_private
+
         nicknameArray = []
-        nicknames = Calendar.joins(:bookedUser).select('nickname').where(id: params[:id])
+        nicknames = Calendar.joins(:booked_users).select('booked_users.nickname').where(id: params[:id])
         nicknames.each do |nickname|
             nicknameArray.push(nickname.nickname)
         end
-
+        #users = Calendar.joins(:bookedUser).select(:nickname, :password).where(id: params[:id])
         team_title = Calendar.find(params[:id]).team_title
          render json: {
            is_Private: is_Private,
-           nicknames: nicknames,
+           nicknameArray: nicknameArray,
            team_title: team_title
          }
     end
 
     def authenticate
         request_data = JSON.parse(request.body.read, symbolize_names: true)
-        targetBookedUser = Calendar.joins(:bookedUser).select('password,booked_user.id').where(booked_users: {nickname: request_data[:nickname]},id: params[:id])
+        targetBookedUser = Calendar.joins(:booked_users).select('booked_users.password, booked_users.id').find(booked_users: {nickname: request_data[:nickname]},id: params[:id])
         if targetBookedUser.password == request_data[:password]
-
             render json: {state: true, bookedUser_id: targetBookedUser.id}
         else
             render json: {state: false}
@@ -29,12 +29,8 @@ class CalendarsController < ApplicationController
     end
 
     def top
-        targetCalendar = Calendar.where(id:params[:id]).select('team_title, description, user_id')
-        nicknameArray = []
-        nicknames = BookedUser.where(calendar_id: params[:id]).select('nickname')
-        nicknames.each do |nickname|
-            nicknameArray.push(nickname.nickname)
-        end
+        users = BookedUser.select(:nickname, :password).where(calendar_id: params[:id])
+        targetCalendar = Calendar.select(:team_title, :description, :user_id).find_by(id: params[:id])
         targetEvents = Event.select(:event_title, :desidedTime).where(Calendar_id: params[:id])
         futureEvents = []
         pastEvents = []
@@ -44,15 +40,15 @@ class CalendarsController < ApplicationController
         targetEvents.each do |targetEvent|
             if targetEvent.desidedTime.nil? || targetEvent.desidedTime > current_time
                 futureEvents << targetEvent
-            else
+
+            elsif targetEvent.desidedTime < current_time
                 pastEvents << targetEvent
             end
-
         end
 
         render json: {
           calendar: targetCalendar,
-          members: nicknameArray,
+          users: users,
           futureEvents: futureEvents,
           pastEvents: pastEvents
         }
@@ -65,12 +61,17 @@ class CalendarsController < ApplicationController
             #user_calendarからデータ消去
             user_id = booked_user.user_id
             if user_id
-                user_calendar = UserCalendar.where(user_id: user_id, calendar_id: params[:id])
+                user_calendar = UserCalender.where(user_id: user_id, calendar_id: params[:id])
                 user_calendar.destroy
             end
             #bookedUserからデータ消去
             booked_user.destroy
-
+            targetPriority = Priority.find_by(bookedUser_id: request_data[:bookedUser_id])
+            targetPriority.destroy
+            targetQuestionAnswers = QuestionAnswer.where(bookedUser_id: request_data[:bookedUser_id])
+            targetQuestionAnswers.each do |targetQuestionAnswer|
+                targetQuestionAnswer.destroy
+            end
             render json: {state: true}
         else
             render json: {state: false}
@@ -126,7 +127,7 @@ class CalendarsController < ApplicationController
 
         if calendar.user_id == request_data[:user_id]
             #カレンダー更新 チーム名と説明のみ更新可（is_privateとbookeduserは更新不可）
-            updated_calendar = calendar.update(calendar_paramsB)
+            updated_calendar = calendar.update(team_title: request_data[:team_title], description: request_data[:description])
             #正常に更新できた場合trueを返す
             if updated_calendar
                 render json: {state: true}
@@ -146,12 +147,11 @@ class CalendarsController < ApplicationController
         #bookeduserがuser_idを持っていたら（アカウントを持っていたら）カレンダー作成可
         # ログインしてるかフロントで判定&表示してもらったほうがいいかも
         #if bookedUser.find(session[:user_id]).user_id
-            calendar = Calendar.create(calendar_params.merge(is_delete:false))
+            calendar = Calendar.create(user_id: request_data[:user_id], team_title: request_data[:team_title], description: request_data[:description],is_private: request_data[:is_private], is_delete:false)
 
             nicknameArray = request_data[:nicknameArray]
             nicknameArray.each do |nickname|
                 #random_password = generate(6)
-
                 new_bookeduser = BookedUser.create(calendar_id: calendar.id, nickname: nickname)
                 if calendar.is_private
                     random_password = generate_random_password(6)
@@ -166,20 +166,10 @@ class CalendarsController < ApplicationController
     #カレンダーを作成しました画面
     def created
         targetCalendar = Calendar.find(params[:id])
-        bookedusers = BookedUser.where(calendar_id: targetCalendar.id).select('nickname, password')
+        bookedusers = BookedUser.select(:nickname, :password, :user_id).where(calendar_id: params[:id])
         if targetCalendar.is_Private == true
-            render json:{
-              bookedusers: bookedusers
-            }
+            render json:{ bookedUsers: bookedusers }
         end
-    end
-    #calendar paramsからデータ取り出し
-    def calendar_params
-        params.permit(:team_title, :description, :is_private, :user_id)
-    end
-
-    def calendar_paramsB
-        params.permit(:team_title, :description)
     end
 
     #ランダムパスワード生成　require sequrerandomが必要
@@ -189,6 +179,57 @@ class CalendarsController < ApplicationController
         #password = ''
         #length.times { password << characters[SecureRandom.random_number(characters.length)] }
         password
+    end
+
+
+    def participate
+        responseArray = []
+
+        calendars = Calendar.joins(:booked_users).select('calendars.title, calendars.id').where(booked_users: { user_id: params[:id] })
+        calendars.eah do |calendar|
+            iconArray = []
+            users = BookedUser.where(calendar_id: calendar.id)
+            users.each do |user|
+                unless user.user_id.nil?
+                    iconArray << user.icon
+                end
+            end
+
+            eventsArray = []
+            events = Event.where(Calendar_id: calendar.id)
+            events.each do |event|
+                eventsArray << {title: event.event_title, id: event.id}
+            end
+
+            responseArray << {calendar: calendar, icon: iconArray, event: eventsArray}
+        end
+
+        render json: responseArray
+    end
+
+    def organize
+        responseArray = []
+
+        calendars = Caleder.select(:title, :id).where(user_id: params[:id])
+        calendars.eah do |calendar|
+            iconArray = []
+            users = BookedUser.where(calendar_id: calendar.id)
+            users.each do |user|
+                unless user.user_id.nil?
+                    iconArray << user.icon
+                end
+            end
+
+            eventsArray = []
+            events = Event.where(Calendar_id: calendar.id)
+            events.each do |event|
+                eventsArray << {title: event.event_title, id: event.id}
+            end
+
+            responseArray << {calendar: calendar, icon: iconArray, event: eventsArray}
+        end
+
+        render json: responseArray
     end
 
 end

@@ -27,7 +27,6 @@ const Calendar = () => {
     `http://localhost:3000/calendar/${getQueryId}`,
     fetcher
     );
-
     console.log(data);
 
     if (error) return "An error has occurred.";
@@ -39,7 +38,7 @@ const Calendar = () => {
     const calendarDesc = data?.calendar.description;
     const futureEvents = data?.futureEvents;
     const pastEvents = data?.pastEvents;
-    const memberList = data?.members;
+    const memberList = data?.users;
 
     return (
         <>
@@ -62,7 +61,7 @@ const Calendar = () => {
             <Modal isOpen={isOpen} handleClose={handleClose}>
                 <div className={styles.memberModal}>
                     {memberList?.map((member) => (
-                        <CalendarMembers memberName={member || "メンバー"}/>
+                        <CalendarMembers memberName={member['nickname'] || "メンバー"}/>
                     ))}
                 </div>
             </Modal>

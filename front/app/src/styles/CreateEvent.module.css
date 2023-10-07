@@ -1,0 +1,152 @@
+/* Modalのスタイル */
+.check {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+}
+
+.check_button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+/* 作成ボタン */
+.check_yes {
+  width: 112px;
+  height: 48px;
+  text-align: center;
+  border-radius: 24px;
+  background-color: #e68147;
+  color: #f9f9f9;
+  border: none;
+}
+
+/* 作成しないボタン */
+.check_yes {
+  width: 112px;
+  height: 48px;
+  text-align: center;
+  border-radius: 24px;
+  background-color: #f9f9f9;
+  color: #525252;
+  border: 1px solid #525252;
+}
+
+/* イベント作成画面のスタイル */
+.header {
+  margin-top: 30px;
+}
+
+.header h2 {
+  margin-top: 38px;
+  margin-bottom: 17px;
+}
+
+.container input {
+  width: 90vw;
+  height: 40px;
+  border: none;
+  background-color: #d9d9d9;
+  font-size: 16px;
+  color: #525252;
+  margin-bottom: 10px;
+  margin-top: 5px;
+}
+
+.item {
+  margin-top: 50px;
+}
+
+.term {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.term input {
+  width: 100px;
+}
+
+.user_priority {
+  width: 90vw;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.user_info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.priority_items {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.priority_items p {
+  padding: 2px 5px;
+  border-radius: 3px;
+  border: 1px solid #525252;
+}
+
+.priority_items input {
+  width: 50px;
+}
+
+.priority_items {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: row;
+  gap: 5px;
+}
+
+.default_question {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0px;
+}
+
+.original_question button {
+  border: none;
+  padding: 0;
+  margin: 0 5px;
+  background: none;
+}
+
+.decide_button {
+  margin: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.decide_button button {
+  text-align: center;
+  width: 270px;
+  height: 60px;
+  border-radius: 30px;
+  background-color: #e68147;
+  border: none;
+}
+
+.decide_button h3 {
+  color: #f9f9f9;
+}

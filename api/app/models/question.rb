@@ -1,3 +1,5 @@
 class Question < ApplicationRecord
-  belongs_to :UserAnswer
+  has_many :user_answers
+  has_many :question_answers
+  has_many :event_questions
 end

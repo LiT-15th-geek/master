@@ -1,3 +1,3 @@
 class UserAnswer < ApplicationRecord
-  has_many :Question
+  belongs_to :question
 end

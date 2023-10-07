@@ -1,6 +1,6 @@
 export type CalendarResponse = {
   calendar: CalendarData; // カレンダー情報を含むオブジェクト
-  members: string[]; // メンバー名の配列
+  users: string[]; // メンバー名の配列
   futureEvents: CalendarEventData[];
   pastEvents: CalendarEventData[];
 };
