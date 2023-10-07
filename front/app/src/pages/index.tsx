@@ -7,6 +7,7 @@ import React, { use, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { useCustomRouter } from "@/hooks/useCustomRouter";
+import { Calendar } from "@/components/common/Calendar";
 
 type Inputs = {
   email: string;
@@ -56,7 +57,7 @@ const Login = () => {
 
   useEffect(() => {
     const loginCheck = async () => {
-      const result = await getCurrentUser()
+      const result = await getCurrentUser();
       if (result) {
         if (getQueryId) {
           routerPush(`/calendar/${getQueryId}`);
@@ -106,6 +107,15 @@ const Login = () => {
               新規登録
             </button>
           </div>
+          <Calendar
+            books={[
+              { day: 1 },
+              { day: 3, event: { id: 1, title: "test" } },
+              { day: 5, event: { id: 1, title: "test4333" } },
+              { day: 6, opacity: "50" },
+              { day: 9, opacity: "aa" },
+            ]}
+          />
         </div>
       </>
     </>
