@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_07_050928) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_07_143027) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,6 +22,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_07_050928) do
     t.boolean "vague"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "point", default: 0
+    t.boolean "alive"
   end
 
   create_table "booked_users", force: :cascade do |t|
