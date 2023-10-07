@@ -127,4 +127,138 @@ end
     end
   end
 
+  #計算ロジック
+  def calculate(event_id)
+    #Mustユーザーの入力したスケジュール全件取得
+    must_ids = Priority.where(event_id: event_id, must: true).BookedUser_id
+    must_records = BookedUserSchedule.where(BookedUser_id: must_ids)
+
+    requireTime = Event.find(event_id).RequireTime * 3600
+
+    #取得した全レコードの時間範囲が所要時間以上か確認
+    must_records.each do |must_record|
+      startTime = must_record.startTime.to_i
+      endTime = must_record.endTime.to_i
+      if endTime - startTime < requireTime
+        BookedUserSchedule.find(must_record.id).alive = false
+      end
+    end
+
+    event_records = BookedUserSchedule.where(event_id: event_id)
+
+    Must_number = Priority.where(event_id: event_id, must: true).count
+    if Must_number >= 2
+      event_records.where(alive: true).each do |record1|
+        date_value = record1.startTime.strftime('%Y-%m-%d')
+        event_records.where("DATE(startTime) = ? and alive = ?", date_value, true).each do |record2|
+          next if record1 == record2
+          STARTTIME = record1.startTime.to_i
+          ENDTIME = record1.endTime.to_i
+          starttime = record2.startTime.to_i
+          endtime = record2.endTime.to_i
+          #パターン2の比較
+          if starttime < STARTTIME && STARTTIME < endtime && endtime < ENDTIME
+            if endtime - STARTTIME < requireTime
+              other_records = event_records.where("DATE(startTime) = ? and alive = ? and BookedUser_id = ?", date_value, true, record1.BookedUser_id)
+              if other_records.nil?
+                BookedUserSchedule.find(record2.id).alive = false
+              else
+                FLAG = 0
+                other_records.each do |other_record|
+                  if other_record.endTime < STARTTIME && starttime < other_record.endTime
+                    if other_record.endTime - starttime > requireTime
+                      FLAG = 1
+                    end
+                  else
+                    BookedUserSchedule.find(record2.id).alive = false
+                  end
+                end
+                if FLAG = 0
+                  BookedUserSchedule.find(record2.id).alive = false
+                end
+              end
+            end
+          #パターン3の比較
+          elsif STARTTIME < starttime && starttime < ENDTIME && ENDTIME < endtime
+            if ENDTIME - starttime < requireTime
+              other_records = BookedUserSchedule.where("DATE(startTime) = ? and alive = ? and BookedUser_id = ?", date_value, true, record1.BookedUser_id)
+              if other_records.nil?
+                BookedUserSchedule.find(record2.id).alive = false
+              else
+                FLAG = 0
+                other_records.each do |other_record|
+                  if ENDTIME < other_record.startTime && other_record.startTime < endtime
+                    if endtime - other_record.startTime > requireTime
+                      FLAG = 1
+                    end
+                  else
+                    BookedUserSchedule.find(record2.id).alive = false
+                  end
+                end
+                if FLAG = 0
+                  BookedUserSchedule.find(record2.id).alive = false
+                end
+              end
+            end
+          #パターン4の比較
+          elsif STARTTIME < starttime && endtime < ENDTIME
+            if endtime - starttime < requireTime
+              BookedUserSchedule.find(record2.id).alive = false
+            end
+          end
+        end
+      end
+    end
+
+    #生き残りレコードに対して参加者ごとの点数を加算していく
+    alive_records = BookedUserSchedule.where(event_id: event_id, alive: true)
+
+    alive_records.each do |alive_record|
+      normal_records = event_records.where.not(Priority: nil) #Mustユーザー以外のユーザー取得
+      normal_records.each do |normal_record|
+        priority_point = Priority.where(event_id: event_id, BookedUser_id: normal_record.BookedUser_id).priority
+        vague_point = priority_point - 0.5
+        STARTTIME = alive_record.startTime.to_i
+        ENDTIME = alive_record.endTime.to_i
+        starttime = normal_record.startTime.to_i
+        endtime = normal_record.endTime.to_i
+        added_record = BookedUserSchedule.find(alive_record.id)
+        #パターン1
+        if starttime < STARTTIME && ENDTIME < endtime
+          if normal_record.vague == true
+            added_record.update(point: added_record.point + vague_point)
+          else
+            added_record.update(point: added_record.point + priority_point)
+          end
+        #パターン2
+        elsif starttime < STARTTIME && STARTTIME < endtime && endtime < ENDTIME
+          if endtime - STARTTIME > requireTime
+            if normal_record.vague == true
+              added_record.update(point: added_record.point + vague_point)
+            else
+              added_record.update(point: added_record.point + priority_point)
+            end
+          end
+        #パターン3
+        elsif STARTTIME < starttime && starttime < ENDTIME && ENDTIME < endtime
+          if ENDTIME - starttime > requireTime
+            if normal_record.vague == true
+              added_record.update(point: added_record.point + vague_point)
+            else
+              added_record.update(point: added_record.point + priority_point)
+            end
+          end
+        #パターン4
+        elsif STARTTIME < starttime && endtime < ENDTIME
+          if endtime - starttime > requireTime
+            if normal_record.vague == true
+              added_record.update(point: added_record.point + vague_point)
+            else
+              added_record.update(point: added_record.point + priority_point)
+            end
+          end
+        end
+      end
+    end
+  end
 end
