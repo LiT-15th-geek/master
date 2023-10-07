@@ -3,6 +3,9 @@ class EventsController < ApplicationController
     #pointsはロジックかけた後の結果
     # pointカラム未実装
     points = BookedUserSchedule.select(:startTime, :endTime, :point).where(event_id: params[:id]).sort_by(&:point).reverse
+
+
+
     bookedUser= BookedUser.find(params[:bookeduser_id])
     calendars = Calendar.where(id: bookedUser.calendar_id)
 
@@ -31,6 +34,8 @@ class EventsController < ApplicationController
       schedule: schedule,
       points: points
     }
+
+
   end
 
   def answer
