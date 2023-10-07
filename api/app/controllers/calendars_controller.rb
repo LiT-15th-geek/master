@@ -61,7 +61,7 @@ class CalendarsController < ApplicationController
             #user_calendarからデータ消去
             user_id = booked_user.user_id
             if user_id
-                user_calendar = UserCalendar.where(user_id: user_id, calendar_id: params[:id])
+                user_calendar = UserCalender.where(user_id: user_id, calendar_id: params[:id])
                 user_calendar.destroy
             end
             #bookedUserからデータ消去
