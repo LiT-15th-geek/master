@@ -25,7 +25,7 @@ export const BookList = (props: Props) => {
           </p>
         ))}
       </div>
-      {children}
+      <div>{children}</div>
     </div>
   );
 };

@@ -9,12 +9,17 @@ import styles from "@/styles/EventCreate.module.css";
 import Image from "next/image";
 
 type Props = {
+  handleSetBooks: (book: GetBookResponse) => void;
   hours?: number[];
+  length?: number;
+  date?: string;
 };
 const times = ["0:00", "6:00", "12:00", "18:00", "24:00"];
 
 export const AddBook = (props: Props) => {
-  const { hours } = props;
+  const { hours, date, length, handleSetBooks } = props;
+  const [priority, setPriority] = useState(0);
+
   const sortHours = hours?.sort((a, b) => a - b);
 
   const [startCurrent, setStartCurrent] = useState(
@@ -126,7 +131,7 @@ export const AddBook = (props: Props) => {
                       ? "1px dashed #595959"
                       : "none",
                 }}
-              ></div>
+              />
             </div>
           ))}
         </div>
@@ -158,10 +163,24 @@ export const AddBook = (props: Props) => {
         </p>
         <p>時間帯を追加する</p>
         <div style={{ display: "flex", justifyContent: "center", gap: 20 }}>
-          <button className={styles.selectButton}>
-            <Image src="/image/ok.svg" alt="ok" width={30} height={30} />
+          <button
+            className={priority === 1 ? styles.selectButton:styles.unselectButton }
+            onClick={() => setPriority(1)}
+          >
+            <Image
+              src="/image/ok.svg"
+              alt="ok"
+              width={30}
+              height={30}
+              style={{
+                color: "#f9f9f9",
+              }}
+            />
           </button>
-          <button className={styles.selectButton}>
+          <button
+            className={priority === 2 ? styles.selectButton:styles.unselectButton }
+            onClick={() => setPriority(2)}
+          >
             <Image src="/image/tryangle.svg" alt="ok" width={30} height={30} />
           </button>
         </div>
@@ -172,7 +191,20 @@ export const AddBook = (props: Props) => {
             borderRadius: "30px",
             background: "#E68147",
             color: "#f9f9f9",
+            border: "none",
           }}
+          onClick={() =>
+            handleSetBooks({
+              alive: false,
+              id: length!,
+              start_time: "2023-9-11 12:00:00",
+              end_time: "2023-9-11 18:00:00",
+              bookedUser_id: 0,
+              event_id: 0,
+              point: 1,
+              vague: false,
+            })
+          }
         >
           追加する
         </button>

@@ -21,7 +21,7 @@
   transform: rotate(90deg);
   background-color: transparent;
 }
-.selectButton {
+.unselectButton {
   border-radius: 30px;
   border: 1px solid #525252;
   background: #f9f9f9;
@@ -30,4 +30,15 @@
   justify-content: center;
   display: flex;
   align-items: center;
+}
+
+.selectButton{
+    border-radius: 30px;
+    border: 1px solid #e68147;
+    background: #f9f9f9;
+    width: 60px;
+    height: 35px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
 }

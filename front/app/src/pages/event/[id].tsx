@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { useCustomRouter } from "@/hooks/useCustomRouter";
 import { Calendar } from "@/components/common/Calendar";
@@ -31,19 +31,19 @@ const Event = () => {
     id: getQueryId,
     event_title: "勉強会",
     description: "勉強会です",
-    term_start_day: "2021-11-10",
-    term_end_day: "2021-11-20",
+    term_start_day: "2023-9-11",
+    term_end_day: "2023-9-14",
     location: "東京都",
     requireTime: "2",
     nickname: "たろう",
   };
 
-  const books: GetBookResponse[] = [
+  const BOOKS: GetBookResponse[] = [
     {
       id: 1,
       event_id: 1,
-      start_time: "2021-11-10 10:00:00",
-      end_time: "2021-11-10 11:00:00",
+      start_time: "2023-9-12 10:00:00",
+      end_time: "2023-9-12 11:00:00",
       vague: false,
       alive: true,
       bookedUser_id: 1,
@@ -71,9 +71,9 @@ const Event = () => {
     },
   ];
 
-  const questions: FAQ[] = [
-    { title: "Figmaの使い方", id: 1, answer: "知ってます" },
-    { title: "Figmaの使い方", id: 2, answer: "知ってます" },
+  const QUESTION: FAQ[] = [
+    { title: "参加費1000円", id: 1, answer: "" },
+    { title: "pc必須", id: 2, answer: "" },
   ];
   const {
     event_title,
@@ -89,6 +89,22 @@ const Event = () => {
   const questionModal = useModal();
   const bookModal = useModal();
   const [selectedDate, setSelectedDate] = React.useState<DiffHour>();
+  const [books, setBooks] = React.useState<GetBookResponse[]>(BOOKS);
+  const [questions, setQuestions] = React.useState<FAQ[]>(QUESTION);
+  const handleSetBooks = (book: GetBookResponse) => {
+    setBooks([...books, book]);
+    bookModal.handleClose();
+  };
+
+  const handleSetAnswer = (answer: { [key: number]: string }) => {
+    Object.keys(answer).map((item, i) => {
+      const newQuestions = [...questions];
+      newQuestions[i].answer = answer[i + 1];
+      setQuestions(newQuestions);
+    });
+    questionModal.handleClose();
+  };
+
   const bookModalOpen = (book: DiffHour) => {
     setSelectedDate(book);
     bookModal.handleOpen();
@@ -106,8 +122,18 @@ const Event = () => {
   const { register, handleSubmit } = useForm();
   const onSubmit = (data: any) => {
     console.log(data);
+    handleSetAnswer(data);
   };
+  const [mounted, setMounted] = React.useState(false);
 
+  useEffect(() => {
+    setMounted(true);
+    setBooks(BOOKS);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
   return (
     <>
       <Modal
@@ -185,10 +211,15 @@ const Event = () => {
           }}
         >
           <p>{selectedDate?.date}:自分の予定</p>
-          <AddBook hours={selectedDate?.hours}/>
+          <AddBook
+            hours={selectedDate?.hours}
+            date={selectedDate?.date}
+            handleSetBooks={handleSetBooks}
+            length={books.length}
+          />
         </div>
       </Modal>
-      <div style={{ margin: "30px 0"}}>
+      <div style={{ margin: "30px 0" }}>
         <Image
           src="/image/leftArrow.svg"
           width={30}
@@ -225,20 +256,21 @@ const Event = () => {
           <Calendar
             books={[
               {
-                day: 1,
+                day: 3,
                 month: 9,
                 year: 2023,
-                event: { id: 1, title: "test4333" },
+                event: { id: 1, title: "テスト勉強" },
               },
-              { day: 3, month: 9, year: 2022, event: { id: 1, title: "test" } },
               {
-                day: 5,
-                month: 8,
+                day: 2,
+                month: 9,
                 year: 2023,
-                event: { id: 1, title: "test4333" },
+                event: { id: 1, title: "テスト勉強" },
               },
-              { day: 6, opacity: "50", month: 9, year: 2023 },
-              { day: 9, opacity: "aa", month: 9, year: 2023 },
+              { day: 11, opacity: "44", month: 9, year: 2023 },
+              { day: 12, opacity: "44", month: 9, year: 2023 },
+              { day: 13, opacity: "88", month: 9, year: 2023 },
+              { day: 14, opacity: "dd", month: 9, year: 2023 },
             ]}
           />
         </div>
@@ -345,7 +377,7 @@ const Event = () => {
                             ? "#E68147"
                             : "none",
                         }}
-                      ></div>
+                      />
                     ))}
                   </div>
                   <Image
@@ -358,6 +390,7 @@ const Event = () => {
               ))}
             </div>
           </BookList>
+
           {/* <h3>他のメンバーの予定</h3>
           {} */}
           <div>
