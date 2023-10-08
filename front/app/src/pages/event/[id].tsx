@@ -9,6 +9,7 @@ import { FAQ } from "@/types/event";
 import { Modal } from "@/components/common/Modal";
 import { useModal } from "@/hooks/useModal";
 import { useForm } from "react-hook-form";
+import { AddBook } from "@/components/eventId/AddBook";
 
 type DiffHour = {
   date: string;
@@ -86,6 +87,12 @@ const Event = () => {
   const dateArray = getDates(term_start_day, term_end_day);
   const diffHours: DiffHour[] = [];
   const questionModal = useModal();
+  const bookModal = useModal();
+  const [selectedDate, setSelectedDate] = React.useState<DiffHour>();
+  const bookModalOpen = (book: DiffHour) => {
+    setSelectedDate(book);
+    bookModal.handleOpen();
+  };
   books.map((book) => {
     const { start_time, end_time } = book;
     const diffHour = getDiffHour(start_time, end_time);
@@ -169,7 +176,19 @@ const Event = () => {
           />
         </form>
       </Modal>
-      <div style={{ margin: "30px 0" }}>
+      <Modal isOpen={bookModal.isOpen} handleClose={bookModal.handleClose}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <p>{selectedDate?.date}:自分の予定</p>
+          <AddBook hours={selectedDate?.hours}/>
+        </div>
+      </Modal>
+      <div style={{ margin: "30px 0"}}>
         <Image
           src="/image/leftArrow.svg"
           width={30}
@@ -285,6 +304,17 @@ const Event = () => {
                     alignItems: "center",
                     gap: "10px",
                   }}
+                  onClick={() =>
+                    bookModalOpen(
+                      mergeDiffHours.filter(
+                        (item) =>
+                          date.toLocaleDateString("en-US", {
+                            month: "2-digit",
+                            day: "2-digit",
+                          }) === item.date
+                      )[0]
+                    )
+                  }
                 >
                   {/* 日付 */}
                   <p style={{ fontSize: "0.7rem" }}>
@@ -319,7 +349,7 @@ const Event = () => {
                     ))}
                   </div>
                   <Image
-                    src={"/image/edit.svg"}
+                    src={"/image/bookEdit.svg"}
                     width={20}
                     height={20}
                     alt="edit"
