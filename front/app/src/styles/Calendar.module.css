@@ -57,7 +57,7 @@
     color: #525252;
 }
 .eachEvents{
-    width: 90vw;
+    width: 200vw;
     display: flex;
     justify-content: space-between;
 }

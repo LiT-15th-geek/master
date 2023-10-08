@@ -11,6 +11,7 @@ import {useFirebase} from "@/hooks/useFirebase";
 import {Modal} from "@/components/common/Modal";
 import {useModal} from "@/hooks/useModal";
 import styles from "@/styles/Calendar.module.css";
+// import { Calendar } from "@/components/common/Calendar";
 import Image from "next/image";
 import {CalendarLeave} from "@/components/calendar/CalendarLeave";
 
@@ -51,7 +52,7 @@ const Calendar = () => {
                     calendarDescription={ calendarDesc || "デフォルトの説明"}
                     handleOpen={handleOpen}
                 />
-                <CalendarMain/>
+                {/*<Calendar/>*/}
                 <CalendarEventBlock
                     nowEventList={ futureEvents! }
                     endEventList={ pastEvents! }
