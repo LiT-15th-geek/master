@@ -9,9 +9,11 @@ type Props = {
 export const SubTitle = (props: Props) => {
   const { title, src, children } = props;
   return (
-    <div style={{ display: "flex", alignItems: "center" }}>
-      <Image src={src} width={40} height={40} alt="icon" />
-      <div>{title}</div>
+    <div style={{ display: "flex", alignItems: "center",justifyContent:"space-between" }}>
+      <div  style={{ display: "flex", alignItems: "center",gap:"10px" }}>
+        <Image src={src} width={30} height={30} alt="icon" />
+        <div>{title}</div>
+      </div>
       {children}
     </div>
   );

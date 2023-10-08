@@ -51,12 +51,13 @@ export const Calendar = (props: Props) => {
   };
 
   return (
-    <div style={{ minWidth: "100vw",position:"relative",right:"5vw" }}>
+    <div style={{ minWidth: "100vw",position:"relative",right:"5vw",margin:"0 0 30px 0" }}>
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          padding:"0 12px"
           }}
       >
         <div

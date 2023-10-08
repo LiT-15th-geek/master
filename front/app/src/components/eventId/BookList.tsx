@@ -7,7 +7,7 @@ const times = ["0:00", "6:00", "12:00", "18:00", "24:00"];
 export const BookList = (props: Props) => {
   const { children } = props;
   return (
-    <div style={{ width: "90vw", display: "flex", flexDirection: "column", }}>
+    <div style={{ width: "90vw", display: "flex", flexDirection: "column",margin:"30px 0" }}>
       <div
         style={{
           display: "flex",
