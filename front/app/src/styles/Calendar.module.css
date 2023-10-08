@@ -1,6 +1,6 @@
 /*ここから↓CalendarHead.tsx*/
 .header{
-    background-color: #D0D0D0;
+    margin-top: 30px;
 }
 .toolBar{
     width: 90vw;
@@ -12,11 +12,13 @@
     margin-bottom: 25px;
 }
 .titleBox h1{
+    font-family: 'Zen Kaku Gothic New', sans-serif;
     font-size: 32px;
     color: #525252;
     margin-bottom: 10px;
 }
 .titleBox p{
+    font-family: 'Zen Kaku Gothic New', sans-serif;
     font-size: 14px;
     color: #525252;
 }
@@ -30,6 +32,7 @@
     align-items: center;
 }
 .menuMember p{
+    font-family: 'Zen Kaku Gothic New', sans-serif;
     font-size: 14px;
     color: #525252;
     margin-top: 10px;
@@ -41,24 +44,25 @@
     margin-bottom: 25px;
 }
 .menuExit p{
+    font-family: 'Zen Kaku Gothic New', sans-serif;
     font-size: 14px;
     color: #525252;
     margin-top: 10px;
 }
 
 /*ここから↓CalendarEventBlock.tsx*/
-.allEvents{
-    background-color: #D0D0D0;
-}
 .allEvents h2{
+    font-family: 'Zen Kaku Gothic New', sans-serif;
     font-size: 24px;
     color: #525252;
 }
 .eachEvents{
+    width: 90vw;
     display: flex;
     justify-content: space-between;
 }
 .eachEvents h3{
+    font-family: 'Zen Kaku Gothic New', sans-serif;
     font-size: 18px;
     color: #525252;
 }
@@ -70,4 +74,15 @@
 .eachEventDetails p{
     font-size: 14px;
     color: #525252;
+}
+/*ここから↓モーダルcss*/
+.memberList{
+    display: flex;
+    justify-content: center;
+}
+.memberList p{
+    font-size: 14px;
+    margin-bottom: 10px;
+    padding-left: 10px;
+
 }

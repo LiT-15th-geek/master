@@ -5,7 +5,7 @@ class CalendarsController < ApplicationController
         is_Private = Calendar.find(params[:id]).is_private
 
         nicknameArray = []
-        nicknames = Calendar.joins(:booked_users).select(:nickname).where(id: params[:id])
+        nicknames = Calendar.joins(:booked_users).select('booked_users.nickname').where(id: params[:id])
         nicknames.each do |nickname|
             nicknameArray.push(nickname.nickname)
         end
@@ -20,7 +20,7 @@ class CalendarsController < ApplicationController
 
     def authenticate
         request_data = JSON.parse(request.body.read, symbolize_names: true)
-        targetBookedUser = Calendar.joins(:booked_users).select(:password,:booked_user.id).find(booked_users: {nickname: request_data[:nickname]},id: params[:id])
+        targetBookedUser = Calendar.joins(:booked_users).select('booked_users.password, booked_users.id').find(booked_users: {nickname: request_data[:nickname]},id: params[:id])
         if targetBookedUser.password == request_data[:password]
             render json: {state: true, bookedUser_id: targetBookedUser.id}
         else
@@ -61,7 +61,7 @@ class CalendarsController < ApplicationController
             #user_calendarからデータ消去
             user_id = booked_user.user_id
             if user_id
-                user_calendar = UserCalendar.where(user_id: user_id, calendar_id: params[:id])
+                user_calendar = UserCalender.where(user_id: user_id, calendar_id: params[:id])
                 user_calendar.destroy
             end
             #bookedUserからデータ消去
@@ -185,7 +185,7 @@ class CalendarsController < ApplicationController
     def participate
         responseArray = []
 
-        calendars = Calendar.joins(:booked_users).select(:title, :id).where(booked_users: { user_id: params[:id] })
+        calendars = Calendar.joins(:booked_users).select('calendars.title, calendars.id').where(booked_users: { user_id: params[:id] })
         calendars.eah do |calendar|
             iconArray = []
             users = BookedUser.where(calendar_id: calendar.id)

@@ -13,10 +13,9 @@ export const CalendarEvent = (props: Props) => {
     return (
         <div className={styles.eachEvents}>
             <h3>{eventTitle}</h3>
+            <Image src={imgUrl} width={24} height={24} alt={"editLogo"}/>
             <div className={styles.eachEventDetails}>
-                <p>入力済み：</p>
-                <p>未入力：</p>
-                <Image src={imgUrl} width={24} height={24} alt={"editLogo"}/>
+
             </div>
         </div>
     )

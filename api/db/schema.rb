@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_06_051128) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_07_184446) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,6 +22,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_06_051128) do
     t.boolean "vague"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "point", default: 0
+    t.boolean "alive"
+    t.date "day"
   end
 
   create_table "booked_users", force: :cascade do |t|
@@ -67,6 +70,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_06_051128) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "priorities", force: :cascade do |t|
+    t.integer "BookedUser_id"
+    t.integer "event_id"
+    t.integer "priority"
+    t.boolean "must"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "question_answers", force: :cascade do |t|
     t.integer "question_id"
     t.integer "BookedUser_id"
@@ -92,7 +104,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_06_051128) do
 
   create_table "user_calenders", force: :cascade do |t|
     t.string "user_id"
-    t.string "calendar_id"
+    t.integer "calendar_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

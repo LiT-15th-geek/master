@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get '/user/:id', to: 'user#show', as: 'user'
+  #get '/user/:id', to: 'user#show', as: 'user'
 
 
   #参加者が自分が参加しているカレンダーを表示
@@ -28,7 +28,8 @@ Rails.application.routes.draw do
 
   #参加/主催カレンダー一覧表示
   get '/user/:id/calendar/participate', to: 'calendars#participate'
-  get '/user/:id/calendar/organize', to:  'calendars#organize
+  get '/user/:id/calendar/organize', to:  'calendars#organize'
+
 
 
   #ログイン/新規作成
@@ -51,6 +52,6 @@ Rails.application.routes.draw do
   #イベント編集画面表示
   get '/event/:id/input', to:'event#edit'
   #イベント新規作成・保存
-  post '/event/save', to:'event#create'
+  post '/calendar/:id/event/save', to:'event#create'
 
 end
