@@ -6,6 +6,9 @@ import { SubTitle } from "@/components/eventId/SubTitle";
 import { BookList } from "@/components/eventId/BookList";
 import { getDates, getDiffHour, mergeObjectsByDate } from "@/utils/date";
 import { FAQ } from "@/types/event";
+import { Modal } from "@/components/common/Modal";
+import { useModal } from "@/hooks/useModal";
+import { useForm } from "react-hook-form";
 
 type DiffHour = {
   date: string;
@@ -82,6 +85,7 @@ const Event = () => {
 
   const dateArray = getDates(term_start_day, term_end_day);
   const diffHours: DiffHour[] = [];
+  const questionModal = useModal();
   books.map((book) => {
     const { start_time, end_time } = book;
     const diffHour = getDiffHour(start_time, end_time);
@@ -92,200 +96,274 @@ const Event = () => {
   }
 
   const mergeDiffHours = mergeObjectsByDate(diffHours);
-  console.log(mergeDiffHours);
+  const { register, handleSubmit } = useForm();
+  const onSubmit = (data: any) => {
+    console.log(data);
+  };
 
   return (
-    <div style={{ margin: "30px 0" }}>
-      <Image
-        src="/image/leftArrow.svg"
-        width={30}
-        height={30}
-        alt="back_icon"
-        onClick={routerBack}
-      />
-      <div>
-        <div style={{ margin: "30px 0" }}>
-          <h2
-            style={{
-              fontFamily: "Zen Kaku Gothic New",
-              fontSize: "32px",
-              fontStyle: "normal",
-              fontWeight: 500,
-              lineHeight: "normal",
-            }}
-          >
-            {event_title}
-          </h2>
+    <>
+      <Modal
+        isOpen={questionModal.isOpen}
+        handleClose={questionModal.handleClose}
+      >
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <p
             style={{
-              color: "#525252",
-              fontFamily: "Zen Kaku Gothic New",
-              fontSize: "14px",
-              fontStyle: "normal",
-              fontWeight: 400,
-              lineHeight: "normal",
+              fontSize: "18px",
+              margin: "20px 0",
             }}
           >
-            {description}
+            質問に回答してください
           </p>
-        </div>
-        <Calendar
-          books={[
-            {
-              day: 1,
-              month: 9,
-              year: 2023,
-              event: { id: 1, title: "test4333" },
-            },
-            { day: 3, month: 9, year: 2022, event: { id: 1, title: "test" } },
-            {
-              day: 5,
-              month: 8,
-              year: 2023,
-              event: { id: 1, title: "test4333" },
-            },
-            { day: 6, opacity: "50", month: 9, year: 2023 },
-            { day: 9, opacity: "aa", month: 9, year: 2023 },
-          ]}
+          {questions.map((question) => (
+            <label
+              key={question.id}
+              style={{
+                margin: "0 0 20px 0",
+              }}
+            >
+              <p
+                style={{
+                  fontSize: "14px",
+                  margin: "0 0 10px 0",
+                }}
+              >
+                {question.title}
+              </p>
+              <input
+                {...register(String(question.id), { required: true })}
+                type="text"
+                style={{
+                  borderRadius: "5px",
+                  border: "1px solid #525252",
+                  background: "#F9F9F9",
+                  boxShadow: "0px 2px 4px 0px rgba(0, 0, 0, 0.25) inset",
+                  width: "200px",
+                  height: "30px",
+                }}
+              />
+            </label>
+          ))}
+          <input
+            value={"回答する"}
+            type="submit"
+            style={{
+              width: "200px",
+              height: "50px",
+              borderRadius: "30px",
+              background: "#E68147",
+              border: "none",
+              color: "#f9f9f9",
+              fontSize: "18px",
+              margin: "20px 0",
+            }}
+          />
+        </form>
+      </Modal>
+      <div style={{ margin: "30px 0" }}>
+        <Image
+          src="/image/leftArrow.svg"
+          width={30}
+          height={30}
+          alt="back_icon"
+          onClick={routerBack}
         />
-      </div>
-      <div>
-        <section style={{ margin: "0  0 30px 0" }}>
-          <h3 style={h3}>イベント詳細</h3>
-          <article style={{ margin: "25px 0" }}>
-            <SubTitle title="予定入力期間" src="/image/time.svg">
-              <p>所要時間 {requireTime}時間</p>
-            </SubTitle>
+        <div>
+          <div style={{ margin: "30px 0" }}>
+            <h2
+              style={{
+                fontFamily: "Zen Kaku Gothic New",
+                fontSize: "32px",
+                fontStyle: "normal",
+                fontWeight: 500,
+                lineHeight: "normal",
+              }}
+            >
+              {event_title}
+            </h2>
+            <p
+              style={{
+                color: "#525252",
+                fontFamily: "Zen Kaku Gothic New",
+                fontSize: "14px",
+                fontStyle: "normal",
+                fontWeight: 400,
+                lineHeight: "normal",
+              }}
+            >
+              {description}
+            </p>
+          </div>
+          <Calendar
+            books={[
+              {
+                day: 1,
+                month: 9,
+                year: 2023,
+                event: { id: 1, title: "test4333" },
+              },
+              { day: 3, month: 9, year: 2022, event: { id: 1, title: "test" } },
+              {
+                day: 5,
+                month: 8,
+                year: 2023,
+                event: { id: 1, title: "test4333" },
+              },
+              { day: 6, opacity: "50", month: 9, year: 2023 },
+              { day: 9, opacity: "aa", month: 9, year: 2023 },
+            ]}
+          />
+        </div>
+        <div>
+          <section style={{ margin: "0  0 30px 0" }}>
+            <h3 style={h3}>イベント詳細</h3>
+            <article style={{ margin: "25px 0" }}>
+              <SubTitle title="予定入力期間" src="/image/time.svg">
+                <p>所要時間 {requireTime}時間</p>
+              </SubTitle>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  margin: "15px 0",
+                  justifyContent: "space-around",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <p>開始日</p>
+                  <p>{term_start_day.replaceAll("-", "/")}</p>
+                </div>
+                <p>ー</p>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <p>終了日</p>
+                  <p>{term_end_day.replaceAll("-", "/")}</p>
+                </div>
+              </div>
+            </article>
+            <article style={{ margin: " 25px 0px 0 0" }}>
+              <SubTitle title="開催場所" src="/image/location.svg">
+                <p>{location}</p>
+              </SubTitle>
+            </article>
+          </section>
+          <h3 style={h3}>自分の予定</h3>
+          <BookList>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              {dateArray.map((date, index) => (
+                <div
+                  key={index}
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    alignItems: "center",
+                    gap: "10px",
+                  }}
+                >
+                  {/* 日付 */}
+                  <p style={{ fontSize: "0.7rem" }}>
+                    {date.toLocaleDateString("en-US", {
+                      month: "2-digit",
+                      day: "2-digit",
+                    })}
+                  </p>
+                  {/* 時間コマ */}
+                  <div style={{ display: "flex", width: "100%" }}>
+                    {[...Array(25)].map((_, i) => (
+                      <div
+                        key={i}
+                        id={String(i)}
+                        style={{
+                          width: "4.2%",
+                          height: "40px",
+
+                          borderLeft: i % 6 === 0 ? "1px dashed #aaa" : "none",
+                          background: mergeDiffHours.find(
+                            (item) =>
+                              date.toLocaleDateString("en-US", {
+                                month: "2-digit",
+                                day: "2-digit",
+                              }) === item.date &&
+                              item.hours.find((hour) => hour === i + 1)
+                          )
+                            ? "#E68147"
+                            : "none",
+                        }}
+                      ></div>
+                    ))}
+                  </div>
+                  <Image
+                    src={"/image/edit.svg"}
+                    width={20}
+                    height={20}
+                    alt="edit"
+                  />
+                </div>
+              ))}
+            </div>
+          </BookList>
+          {/* <h3>他のメンバーの予定</h3>
+          {} */}
+          <div>
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
-                margin: "15px 0",
-                justifyContent: "space-around",
+                justifyContent: "space-between",
+                margin: "0  0 10px 0",
               }}
             >
+              <h3 style={h3}>質問への回答</h3>
               <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
+                style={{ display: "flex", alignItems: "center" }}
+                onClick={questionModal.handleOpen}
               >
-                <p>開始日</p>
-                <p>{term_start_day.replaceAll("-", "/")}</p>
-              </div>
-              <p>ー</p>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                <p>終了日</p>
-                <p>{term_end_day.replaceAll("-", "/")}</p>
+                <p style={{ fontSize: "1.2rem" }}>回答する</p>
+                <Image
+                  src={"/image/nextmonth.svg"}
+                  alt="回答する"
+                  width={30}
+                  height={30}
+                />
               </div>
             </div>
-          </article>
-          <article style={{ margin: " 25px 0px 0 0" }}>
-            <SubTitle title="開催場所" src="/image/location.svg">
-              <p>{location}</p>
-            </SubTitle>
-          </article>
-        </section>
-        <h3 style={h3}>自分の予定</h3>
-        <BookList>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            {dateArray.map((date, index) => (
-              <div
-                key={index}
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  alignItems: "center",
-                  gap: "10px",
-                }}
-              >
-                {/* 日付 */}
-                <p style={{ fontSize: "0.7rem" }}>
-                  {date.toLocaleDateString("en-US", {
-                    month: "2-digit",
-                    day: "2-digit",
-                  })}
-                </p>
-                {/* 時間コマ */}
-                <div style={{ display: "flex", width: "100%" }}>
-                  {[...Array(25)].map((_, i) => (
-                    <div
-                      key={i}
-                      id={String(i)}
-                      style={{
-                        width: "4.2%",
-                        height: "40px",
 
-                        borderLeft: i % 6 === 0 ? "1px dashed #aaa" : "none",
-                        background: mergeDiffHours.find(
-                          (item) =>
-                            date.toLocaleDateString("en-US", {
-                              month: "2-digit",
-                              day: "2-digit",
-                            }) === item.date &&
-                            item.hours.find((hour) => hour === i + 1)
-                        )
-                          ? "#E68147"
-                          : "none",
-                      }}
-                    ></div>
-                  ))}
-                </div>
-                <Image
-                  src={"/image/edit.svg"}
-                  width={20}
-                  height={20}
-                  alt="edit"
-                />
+            {questions.map((question) => (
+              <div key={question.id} style={{ margin: "10px 0 0 0" }}>
+                <div>質問　{question.title}</div>
+                <div>回答　{question.answer}</div>
               </div>
             ))}
           </div>
-        </BookList>
-        {/* <h3>他のメンバーの予定</h3>
-          {} */}
-        <div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              margin: "0  0 10px 0",
-            }}
-          >
-            <h3 style={h3}>質問への回答</h3>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <p style={{ fontSize: "1.2rem" }}>回答する</p>
-              <Image
-                src={"/image/nextmonth.svg"}
-                alt="回答する"
-                width={30}
-                height={30}
-              />
-            </div>
-          </div>
-
-          {questions.map((question) => (
-            <div key={question.id} style={{margin:"10px 0 0 0"}}>
-              <div>質問　{question.title}</div>
-              <div>回答　{question.answer}</div>
-            </div>
-          ))}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
