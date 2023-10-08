@@ -11,7 +11,13 @@ type Event = {
   title: string;
 };
 type Props = {
-  books: { day: number; opacity?: string; event?: Event }[];
+  books: {
+    day: number;
+    opacity?: string;
+    event?: Event;
+    month: number;
+    year: number;
+  }[];
 };
 
 export const Calendar = (props: Props) => {
@@ -41,18 +47,18 @@ export const Calendar = (props: Props) => {
   };
   const filterColors = books.filter((book) => book.opacity);
   const handleFilterColor = (index: number) => {
-    return filterColors.find((book) => book.day == index);
+    return filterColors.find((book) => book.day == index && book.month == month && book.year == year);
   };
 
   return (
-    <div style={{ minWidth: "100vw" }}>
+    <div style={{ minWidth: "100vw",position:"relative",right:"5vw",margin:"0 0 30px 0" }}>
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          padding: "0 3vw",
-        }}
+          padding:"0 12px"
+          }}
       >
         <div
           style={{ display: "flex", alignItems: "center", gap: "10px" }}
@@ -134,6 +140,8 @@ export const Calendar = (props: Props) => {
               {dayCount > index && index + 1}
               {books.map(
                 (book) =>
+                  year == book.year &&
+                  month == book.month &&
                   book.day == index + 1 &&
                   book.event && (
                     <p
@@ -143,13 +151,14 @@ export const Calendar = (props: Props) => {
                         color: "#f9f9f9",
                         borderRadius: "5px",
                         padding: "0 5px",
-                        maxWidth: "96%",
-                        minWidth: "96%",
+                        maxWidth: "87%",
+                        minWidth: "87%",
                         textAlign: "center",
                         margin: "4px 0 0 0px",
                         overflow: "hidden",
                         whiteSpace: "nowrap",
                         textOverflow: "ellipsis",
+                        fontSize: "10px",
                       }}
                     >
                       {book.event.title}

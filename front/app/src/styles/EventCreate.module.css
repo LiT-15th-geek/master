@@ -1,0 +1,44 @@
+.customVerticalSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 35px; /* つまみの幅 */
+  height: 35px; /* つまみの高さ */
+  background: url("/image/place.svg") no-repeat; /* カスタム画像のURLを指定 */
+  background-size: cover;
+  cursor: pointer;
+  background-color: transparent;
+  box-shadow: none;
+  position: relative;
+  right: 65px;
+}
+#left::-webkit-slider-thumb {
+  transform: rotate(180deg);
+  right: 75px;
+}
+.customVerticalSlider {
+  -webkit-appearance: none;
+  width: 288px;
+  top: 50%;
+  transform: rotate(90deg);
+  background-color: transparent;
+}
+.unselectButton {
+  border-radius: 30px;
+  border: 1px solid #525252;
+  background: #f9f9f9;
+  width: 60px;
+  height: 35px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+
+.selectButton{
+    border-radius: 30px;
+    border: 1px solid #e68147;
+    background: #f9f9f9;
+    width: 60px;
+    height: 35px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}

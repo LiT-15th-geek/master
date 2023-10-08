@@ -44,6 +44,7 @@ export const Modal = (props: Props) => {
             </div>
             {children}
           </div>
+          <div className={styles.nonScroll}></div>
         </div>
       )}
     </>

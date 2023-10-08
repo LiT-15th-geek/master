@@ -9,6 +9,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    overscroll-behavior: contain;
+    overflow-y: scroll;
 }
 .modalBody{
     width: 80%;
@@ -25,4 +28,9 @@
     display: flex;
     justify-content: flex-end;
     gap: 20px;
+}
+.nonScroll{
+    height:calc(100vh + 1px) ;
+    width: 1px;
+    background-color: transparent;
 }
