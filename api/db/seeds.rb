@@ -1,6 +1,6 @@
 
 Event.delete_all()
-# BookedUser.delete_all()
+BookedUser.delete_all()
 # Calendar.delete_all()
 users = [
     { id:"aaa",name: "たけし", icon: "https://example.com/images/soccer.png" },
@@ -12,8 +12,8 @@ users = [
 
 booked_users = [
   { calendar_id: 1, nickname: "マエヒロ", password: "lifeistech1", user_id: "uuid1"},
-  { calendar_id: 2, nickname: "ピリ", password: "lifeistech2", user_id: "uuid2"},
-  { calendar_id: 3, nickname: "かわすけ", password: "lifeistech3", user_id: "uuid3"}
+  { calendar_id: 1, nickname: "ピリ", password: "lifeistech2", user_id: "uuid2"},
+  { calendar_id: 1, nickname: "かわすけ", password: "lifeistech3", user_id: "uuid3"}
 ]
 
 #  users.each do |user|
