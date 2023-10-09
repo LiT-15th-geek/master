@@ -39,7 +39,6 @@ booked_users.each do |booked_user|
     BookedUser.create(calendar_id: calendar_id, nickname: nickname, password: password, user_id: user_id)
 end
 
-Event.delete_all()
 events = [
   {Calendar_id: 1, event_title: "勉強会", description: "勉強会です", term_start_day: "2023-9-11", term_end_day: "2023-9-20", location: "discord", user_id: "aaa", RecurrenceSetting: false, RequireTime: 2, decidedTime: "2023-10-15", is_delete: false, created_at: "2023-9-1", updated_at: "2023-9-1"},
   {Calendar_id: 1, event_title: "大阪キャラバン", description: "bbb", term_start_day: "2023-10-10", term_end_day: "2023-10-11", location: "discord", user_id: "aaa", RecurrenceSetting: false, RequireTime: 2, decidedTime: "2023-10-15", is_delete: false, created_at: "2023-9-1", updated_at: "2023-9-1"},

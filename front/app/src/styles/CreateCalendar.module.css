@@ -62,3 +62,32 @@
 .submit_button h3 {
   color: #f9f9f9;
 }
+
+.modalBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.modalBody p {
+  margin: 20px 0 ;
+  font-size: 1.1rem;
+}
+
+.modalBody .activeButton {
+  width: 112px;
+  height: 48px;
+  border-radius: 24px;
+  background: #e68147;
+  border: none;
+  color: #f9f9f9;
+}
+
+.modalBody .Button {
+  width: 112px;
+  height: 48px;
+  border-radius: 24px;
+  background: #f9f9f9;
+  border: 1px solid #525252;
+}

@@ -56,32 +56,40 @@ const CreateCalendar: NextPage = () => {
   };
 
   const handleCreateCalendar = async () => {
-    try {
-      const result = await fetch("", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(request),
-      });
-      const json: CreateCalendarResponse = await result.json();
-      if (json) {
-        handleClose();
-        routerPush(`/createCalendar/${json.calendar_id}`);
-        return;
-      }
-    } catch (e) {
-      console.log(e);
-    }
+    // try {
+    //   const result = await fetch("", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(request),
+    //   });
+    //   const json: CreateCalendarResponse = await result.json();
+    //   if (json) {
+    //     handleClose();
+    //     routerPush(`/createCalendar/${json.calendar_id}`);
+    //     return;
+    //   }
+    // } catch (e) {
+    //   console.log(e);
+    // }
+    routerPush(`/createCalendar/1`)
   };
   return (
     <div>
       <Modal isOpen={isOpen} handleClose={handleClose}>
         <div className={styles.modalBody}>
           <p>カレンダーを作成しますか？</p>
-          <div>
-            <button onClick={handleCreateCalendar}>作成する</button>
-            <button onClick={handleClose}>作成しない</button>
+          <div style={{ display: "flex", fontSize: "16px", gap: "15px" }}>
+            <button
+              onClick={handleCreateCalendar}
+              className={styles.activeButton}
+            >
+              作成する
+            </button>
+            <button onClick={handleClose} className={styles.Button}>
+              作成しない
+            </button>
           </div>
         </div>
       </Modal>
@@ -99,13 +107,26 @@ const CreateCalendar: NextPage = () => {
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           <div className={styles.categories}>
             <Label title="カレンダー名を入力" href={"/image/edit.svg"}></Label>
-            <input type="text" {...register("name", { required: true })} />
+            <input
+              type="text"
+              {...register("name", { required: true })}
+              style={{
+                borderRadius: "5px",
+                boxShadow: "0px 0px 3px 0px #000 inset",
+                background: "#f9f9f9",
+              }}
+            />
             {errors.name && <span>This field is required</span>}
             <label>
               <p>詳細を入力</p>
               <input
                 type="text"
                 {...register("description", { required: true })}
+                style={{
+                  borderRadius: "5px",
+                  boxShadow: "0px 0px 3px 0px #000 inset",
+                  background: "#f9f9f9",
+                }}
               />
             </label>
           </div>
@@ -125,7 +146,15 @@ const CreateCalendar: NextPage = () => {
               );
             })}
             <div>
-              <input type="text" ref={inputRef} />
+              <input
+                type="text"
+                ref={inputRef}
+                style={{
+                  borderRadius: "5px",
+                  boxShadow: "0px 0px 3px 0px #000 inset",
+                  background: "#f9f9f9",
+                }}
+              />
               <button
                 className={styles.add_button}
                 onClick={(e) => {
@@ -158,7 +187,11 @@ const CreateCalendar: NextPage = () => {
             </div>
           </div>
           <div className={styles.button_setting}>
-            <button type="submit" className={styles.submit_button}>
+            <button
+              type="submit"
+              className={styles.submit_button}
+              onClick={handleOpen}
+            >
               <h3>カレンダーを作成する</h3>
             </button>
           </div>
