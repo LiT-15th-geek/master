@@ -55,7 +55,7 @@ const Invited = () => {
             <>
               <p className={styles.modalTitle}>名前を選択してください</p>
               <div className={styles.members}>
-                {data?.nicknames.map((name, i) => (
+                {data?.nicknameArray.map((name, i) => (
                   <div
                     className={styles.member}
                     key={i + 1}
@@ -69,7 +69,7 @@ const Invited = () => {
                       height={30}
                       alt="user"
                     />
-                    <p>{name.nickname}</p>
+                    <p>{name}</p>
                   </div>
                 ))}
               </div>
@@ -114,7 +114,7 @@ const Invited = () => {
                 height={30}
                 alt="user"
               />
-              <p>{user.nickname}</p>
+              <p>マエヒロ</p>
             </div>
             {data?.is_Private && (
               <input

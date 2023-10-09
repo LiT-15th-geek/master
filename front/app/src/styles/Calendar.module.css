@@ -57,7 +57,7 @@
     color: #525252;
 }
 .eachEvents{
-    width: 200vw;
+    width: 90vw;
     display: flex;
     justify-content: space-between;
 }
@@ -66,11 +66,7 @@
     font-size: 18px;
     color: #525252;
 }
-.eachEventDetails{
-    display: flex;
-    width: 40vw;
-    justify-content: space-between;
-}
+
 .eachEventDetails p{
     font-size: 14px;
     color: #525252;

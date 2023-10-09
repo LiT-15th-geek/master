@@ -39,7 +39,6 @@ const CalendarId = () => {
   const futureEvents = data?.futureEvents;
   const pastEvents = data?.pastEvents;
   const memberList = data?.users;
-
   return (
     <>
       {/*<div>{getQueryId}</div>*/}

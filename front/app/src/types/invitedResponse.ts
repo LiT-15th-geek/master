@@ -1,9 +1,5 @@
 export type InvitedResponse = {
   is_Private: boolean;
-  nicknames: NickNames[];
+  nicknameArray: string[];
   team_title: string;
 };
-export type NickNames={
-  nickname:string;
-  id:number;
-}

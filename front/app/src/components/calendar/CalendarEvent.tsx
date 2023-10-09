@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from "@/styles/Calendar.module.css";
 import Image from "next/image";
+import {useCustomRouter} from "@/hooks/useCustomRouter";
 type Props = {
     eventTitle: string;
     imgUrl: string;
@@ -9,14 +10,16 @@ type Props = {
 export const CalendarEvent = (props: Props) => {
     const { eventTitle } = props;
     const { imgUrl } = props;
+    const { routerPush } = useCustomRouter();
+
+    const handleClickEventEdit = () => {
+        routerPush(`/event/1`);
+    }
 
     return (
         <div className={styles.eachEvents}>
             <h3>{eventTitle}</h3>
-            <Image src={imgUrl} width={24} height={24} alt={"editLogo"}/>
-            <div className={styles.eachEventDetails}>
-
-            </div>
+            <Image src={imgUrl} width={24} height={24} alt={"editLogo"} onClick={handleClickEventEdit}/>
         </div>
     )
 }
