@@ -10,7 +10,6 @@ RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
 
 COPY Gemfile /app/Gemfile
 COPY Gemfile.lock /app/Gemfile.lock
-
 # RailsのバージョンはGemfileに依存
 RUN bundle lock --add-platform x86_64-linux
 RUN bundle install
