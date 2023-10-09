@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { Label } from "@/components/createCalendar.tsx/Label";
@@ -112,6 +112,18 @@ const CreateEvent: NextPage = () => {
       console.log(e);
     }
   };
+  const [isChecked1,setIsChecked1]  = useState<[{user_id: number, status: number}]>([{user_id: 0, status:0}]);
+
+  const column = [{status: }, {}]
+
+  const handleChecked =(priorityIndex:number, user_id:number)=>{
+    setIsChecked1([{user_id: user_id, status: priorityIndex}])
+    const backgroundColor = user_id === 1 && priorityIndex === 2 ? 'green' : 'red';
+  }
+
+
+  // @ts-ignore
+  // @ts-ignore
   return (
     <div>
       <Modal isOpen={isOpen} handleClose={handleClose}>
@@ -142,6 +154,11 @@ const CreateEvent: NextPage = () => {
           <div className={styles.item}>
             <Label title="イベント名を入力" href={"/image/edit.svg"}>
               <input
+                style={{
+                  borderRadius: "5px",
+                  boxShadow: "0px 0px 3px 0px #000 inset",
+                  background: "#f9f9f9",
+                }}
                 type="text"
                 {...register("event_title", { required: true })}
               />
@@ -150,6 +167,11 @@ const CreateEvent: NextPage = () => {
             <label>
               <p>詳細を入力</p>
               <input
+                style={{
+                  borderRadius: "5px",
+                  boxShadow: "0px 0px 3px 0px #000 inset",
+                  background: "#f9f9f9",
+                }}
                 type="text"
                 {...register("description", { required: true })}
               />
@@ -161,6 +183,11 @@ const CreateEvent: NextPage = () => {
               <label>
                 <p>開始日</p>
                 <input
+                  style={{
+                    borderRadius: "5px",
+                    boxShadow: "0px 0px 3px 0px #000 inset",
+                    background: "#f9f9f9",
+                  }}
                   className={styles.term}
                   type="text"
                   {...register("term_start_day", { required: true })}
@@ -172,6 +199,11 @@ const CreateEvent: NextPage = () => {
               <label>
                 <p>終了日</p>
                 <input
+                  style={{
+                    borderRadius: "5px",
+                    boxShadow: "0px 0px 3px 0px #000 inset",
+                    background: "#f9f9f9",
+                  }}
                   className={styles.term}
                   type="text"
                   {...register("term_end_day", { required: true })}
@@ -181,6 +213,11 @@ const CreateEvent: NextPage = () => {
             <label>
               <p>所要時間を入力</p>
               <input
+                style={{
+                  borderRadius: "5px",
+                  boxShadow: "0px 0px 3px 0px #000 inset",
+                  background: "#f9f9f9",
+                }}
                 type="text"
                 {...register("requireTime", { required: true })}
               />
@@ -189,6 +226,11 @@ const CreateEvent: NextPage = () => {
           <div className={styles.item}>
             <Label title="開催場所を入力" href={"/image/mapPin.svg"}>
               <input
+                style={{
+                  borderRadius: "5px",
+                  boxShadow: "0px 0px 3px 0px #000 inset",
+                  background: "#f9f9f9",
+                }}
                 type="text"
                 {...register("location", { required: true })}
               />
@@ -209,13 +251,19 @@ const CreateEvent: NextPage = () => {
                     <p>{user.name}</p>
                   </div>
                   <div className={styles.priority_items}>
-                    {Priorities.map((priority, index) => (
-                      <label key={index + 1}>
+                    {Priorities.map((priority, priorityIndex) => (
+                        // backgroundColor: isChecked1 ? "#E68147" : "#f9f9f9",
+                        <label key={index + 1} onClick={() => handleChecked(priorityIndex, user.id)} style={index === 1 && priorityIndex === 2 ? {backgroundColor: "#E68147" : "#f9f9f9",}}>
                         <p>{priority.name}</p>
                         <input
+                          style={{
+                            borderRadius: "5px",
+                            boxShadow: "0px 0px 3px 0px #000 inset",
+                            display: "none"
+                          }}
+
                           type="checkbox"
                           {...register("members.0.priority")}
-                          style={{ display: "none" }}
                         />
                       </label>
                     ))}
@@ -243,18 +291,24 @@ const CreateEvent: NextPage = () => {
 
             {/* 質問作成*/}
             <div className={styles.original_question}>
-              <input type="text" ref={inputRef} />
+              <input type="text" ref={inputRef} style={{
+                borderRadius: "5px",
+                boxShadow: "0px 0px 3px 0px #000 inset",
+                background: "#f9f9f9",
+              }}/>
               <button
                 onClick={(e) => {
                   handleSetQuestions(e);
                 }}
               >
                 <Image
-                  src="/image/plusSquare.svg"
+
+                  src= "/image/plusSquare.svg"
                   width={30}
                   height={30}
                   alt="add_icon"
                 />
+
               </button>
             </div>
           </div>
