@@ -1,3 +1,7 @@
+
+Event.delete_all()
+# BookedUser.delete_all()
+# Calendar.delete_all()
 users = [
     { id:"aaa",name: "たけし", icon: "https://example.com/images/soccer.png" },
     { id:"bbb",name: "さおり",  icon: "https://example.com/images/volleyball.png" },
@@ -12,11 +16,11 @@ booked_users = [
   { calendar_id: 3, nickname: "かわすけ", password: "lifeistech3", user_id: "uuid3"}
 ]
 
- users.each do |user|
-     ハッシュのキーを利用した分割代入
-     id, name,icon = user.values_at(:id,:name,:icon)
-   User.create(id:id,name: name, icon: icon)
- end
+#  users.each do |user|
+#     #  ハッシュのキーを利用した分割代入
+#      id, name,icon = user.values_at(:id,:name,:icon)
+#    User.create(id:id,name: name, icon: icon)
+#  end
 
 calendars = [
     { team_title: "WebS 15h", description: "Lit WebS15h", user_id: "aaa", is_private: false, is_delete: false},
@@ -35,8 +39,11 @@ booked_users.each do |booked_user|
     BookedUser.create(calendar_id: calendar_id, nickname: nickname, password: password, user_id: user_id)
 end
 
+Event.delete_all()
 events = [
-  {Calendar_id: 1, event_title: "aaa", description: "bbb", term_start_day: "2023-9-11", term_end_day: "2023-9-30", location: "discord", user_id: "aaa", RecurrenceSetting: false, RequireTime: 2, decidedTime: "2023-9-15", is_delete: false, created_at: "2023-9-1", updated_at: "2023-9-1"}
+  {Calendar_id: 1, event_title: "勉強会", description: "勉強会です", term_start_day: "2023-9-11", term_end_day: "2023-9-20", location: "discord", user_id: "aaa", RecurrenceSetting: false, RequireTime: 2, decidedTime: "2023-10-15", is_delete: false, created_at: "2023-9-1", updated_at: "2023-9-1"},
+  {Calendar_id: 1, event_title: "大阪キャラバン", description: "bbb", term_start_day: "2023-10-10", term_end_day: "2023-10-11", location: "discord", user_id: "aaa", RecurrenceSetting: false, RequireTime: 2, decidedTime: "2023-10-15", is_delete: false, created_at: "2023-9-1", updated_at: "2023-9-1"},
+  {Calendar_id: 1, event_title: "技育展", description: "bbb", term_start_day: "2023-10-10", term_end_day: "2023-10-11", location: "discord", user_id: "aaa", RecurrenceSetting: false, RequireTime: 2, decidedTime: "2023-9-15", is_delete: false, created_at: "2023-9-1", updated_at: "2023-9-1"}
 ]
 
 events.each do |event|

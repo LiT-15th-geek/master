@@ -31,17 +31,17 @@ class CalendarsController < ApplicationController
     def top
         users = BookedUser.select(:nickname, :password).where(calendar_id: params[:id])
         targetCalendar = Calendar.select(:team_title, :description, :user_id).find_by(id: params[:id])
-        targetEvents = Event.select(:event_title, :desidedTime).where(Calendar_id: params[:id])
+        targetEvents = Event.select(:event_title, :decidedTime).where(Calendar_id: params[:id])
         futureEvents = []
         pastEvents = []
 
         current_time = Time.current
         # p targetEvents
         targetEvents.each do |targetEvent|
-            if targetEvent.desidedTime.nil? || targetEvent.desidedTime > current_time
+            if targetEvent.decidedTime.nil? || targetEvent.decidedTime > current_time
                 futureEvents << targetEvent
 
-            elsif targetEvent.desidedTime < current_time
+            elsif targetEvent.decidedTime < current_time
                 pastEvents << targetEvent
             end
         end
